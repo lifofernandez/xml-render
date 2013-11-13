@@ -22,13 +22,7 @@ function xml_render_help($path, $arg) {
  * Implements hook_menu().
  */
 function xml_render_menu() {
-/*
-  $items['hello'] = array(
-    'title' => 'Hello world!',
-    'page callback' => 'helloworld_page',
-    'access callback' => TRUE,
-  );
-*/
+
   $items['node/%node/xml'] = array(
     'title' => 'XML',
     'page callback' => 'node_xml',
@@ -44,20 +38,12 @@ function xml_render_menu() {
   return $items;
 }
 
-/**
- * Page callback for /hello.
- */
-/*
-function helloworld_page() {
-  return 'Hello world!';
-}
-*/
+
 function node_xml($node) {
 	$output;
 
 	//$output = new DOMDocument;
 	
-	//echo $output->saveXml();
  	// return 'Hello world!';
     // return t('Hello node with id !nid', array('!nid' => $node->nid));
    	// return print_r($node);
