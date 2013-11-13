@@ -42,10 +42,7 @@ function xml_render_menu() {
 function node_xml($node) {
 	$output;
 
-	//$output = new DOMDocument;
-	
- 	// return 'Hello world!';
-    // return t('Hello node with id !nid', array('!nid' => $node->nid));
+ 	// return t('Hello node with id !nid', array('!nid' => $node->nid));
    	// return print_r($node);
 	
 	
@@ -61,7 +58,7 @@ function node_xml($node) {
 		$fc_name = $fc->field_name;
 		
 		$autor_nombre = '<field_nombre>'.$fc->field_nombre['und'][0]['safe_value'].'</field_nombre>';
-        $autor_bio = '<field_biografia>'.$fc->field_biografia['und'][0]['safe_value'].'</field_biografia>';
+		$autor_bio = '<field_biografia>'.$fc->field_biografia['und'][0]['safe_value'].'</field_biografia>';
 	 	
 	 	$autor = '<'.$fc_name.'>'.$autor_nombre.$autor_bio.'</'.$fc_name.'>';
 	}
