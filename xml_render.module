@@ -85,5 +85,5 @@ function node_xml($node) {
 	$dom->loadXML($output);
 	$dom->formatOutput = TRUE;
 	//echo $dom->saveXml();
-	return $dom->saveXml();
+	return '<pre>'.$dom->saveXml().'</pre>';
 }
