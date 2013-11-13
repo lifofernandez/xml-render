@@ -43,7 +43,7 @@ function node_xml($node) {
 	$output;
 
  	// return t('Hello node with id !nid', array('!nid' => $node->nid));
-   	// return print_r($node);
+ 	// return print_r($node);
 	
 	
 	
@@ -59,8 +59,8 @@ function node_xml($node) {
 		
 		$autor_nombre = '<field_nombre>'.$fc->field_nombre['und'][0]['safe_value'].'</field_nombre>';
 		$autor_bio = '<field_biografia>'.$fc->field_biografia['und'][0]['safe_value'].'</field_biografia>';
-	 	
-	 	$autor = '<'.$fc_name.'>'.$autor_nombre.$autor_bio.'</'.$fc_name.'>';
+		
+		$autor = '<'.$fc_name.'>'.$autor_nombre.$autor_bio.'</'.$fc_name.'>';
 	}
 	//////////////////////
 
