@@ -1,0 +1,106 @@
+ <?php 
+/**
+ * Implements hook_help.
+ *
+ * Displays help and module information.
+ *
+ * @param path
+ *   Which path of the site we're using to display help
+ * @param arg
+ *   Array that holds the current path as returned from arg() function
+ */
+function xml_render_help($path, $arg) {
+  switch ($path) {
+    case "admin/help#xml_render":
+      return '<p>' . t("Displays xml of the content") . '</p>';
+      break;
+  }
+} 
+
+
+/**
+ * Implements hook_menu().
+ */
+function xml_render_menu() {
+/*
+  $items['hello'] = array(
+    'title' => 'Hello world!',
+    'page callback' => 'helloworld_page',
+    'access callback' => TRUE,
+  );
+*/
+  $items['node/%node/xml'] = array(
+    'title' => 'XML',
+    'page callback' => 'node_xml',
+    'page arguments' => array(1),
+    'access callback' => 'node_access',
+    'access arguments' => array('update', 1),
+    'weight' => 0,
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+    //'file' => 'node.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Page callback for /hello.
+ */
+/*
+function helloworld_page() {
+  return 'Hello world!';
+}
+*/
+function node_xml($node) {
+	$output;
+
+	//$output = new DOMDocument;
+	
+	//echo $output->saveXml();
+ 	// return 'Hello world!';
+    // return t('Hello node with id !nid', array('!nid' => $node->nid));
+   	// return print_r($node);
+	
+	
+	
+	$wrapper = entity_metadata_wrapper('node', $node);
+
+	//AUTOR//////////////
+	$autor_items = field_get_items('node', $node, 'field_autor');
+	$autor;
+	foreach ($autor_items as $autor_item) {
+		$fc = field_collection_field_get_entity($autor_item);
+		//return print_r($fc);
+		$fc_name = $fc->field_name;
+		
+		$autor_nombre = '<field_nombre>'.$fc->field_nombre['und'][0]['safe_value'].'</field_nombre>';
+        $autor_bio = '<field_biografia>'.$fc->field_biografia['und'][0]['safe_value'].'</field_biografia>';
+	 	
+	 	$autor = '<'.$fc_name.'>'.$autor_nombre.$autor_bio.'</'.$fc_name.'>';
+	}
+	//////////////////////
+
+	//INDTRODUCCION//////////////
+	$introduccion_items = field_get_items('node', $node, 'field_introduccion');
+	$introduccion = '<field_introduccion>'.$introduccion_items[0]['safe_value'].'</field_introduccion>';
+	//////////////////////
+
+	//PROBLEMATICA_DEL_CAMPO//////////////
+	$problematica_items = field_get_items('node', $node, 'field_problematica_del_campo');
+	$problematica = '<field_problematica_del_campo>'.$introduccion_items[0]['safe_value'].'</field_problematica_del_campo>';
+	//////////////////////
+
+
+
+	///sum all fields
+	$output = '<carpeta>'.$autor.$introduccion.$problematica.'</carpeta>';
+
+	//build XML document
+	$dom = new DOMDocument;
+	$dom->preserveWhiteSpace = FALSE;
+	$dom->loadXML($output);
+	$dom->formatOutput = TRUE;
+	//echo $dom->saveXml();
+	return $dom->saveXml();
+}
