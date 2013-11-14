@@ -40,44 +40,127 @@ function xml_render_menu() {
 
 
 function node_xml($node) {
-	$output;
+	$output = '<carpeta>';
 
  	// return t('Hello node with id !nid', array('!nid' => $node->nid));
  	// return print_r($node);
-	
 	
 	
 	$wrapper = entity_metadata_wrapper('node', $node);
 
 	//AUTOR//////////////
 	$autor_items = field_get_items('node', $node, 'field_autor');
-	$autor;
-	foreach ($autor_items as $autor_item) {
-		$fc = field_collection_field_get_entity($autor_item);
-		//return print_r($fc);
-		$fc_name = $fc->field_name;
-		
-		$autor_nombre = '<field_nombre>'.$fc->field_nombre['und'][0]['safe_value'].'</field_nombre>';
-		$autor_bio = '<field_biografia>'.$fc->field_biografia['und'][0]['safe_value'].'</field_biografia>';
-		
-		$autor = '<'.$fc_name.'>'.$autor_nombre.$autor_bio.'</'.$fc_name.'>';
+	$autor = '';
+	if(isset($autor_items)){
+		foreach ($autor_items as $autor_item) {
+			$fc = field_collection_field_get_entity($autor_item);
+			//return print_r($fc);
+			$fc_name = $fc->field_name;
+			
+			$autor_nombre = '<nombre>'.$fc->field_nombre['und'][0]['safe_value'].'</nombre>';
+			$autor_bio = '<biografia>'.$fc->field_biografia['und'][0]['safe_value'].'</biografia>';
+			
+			$autor ='<autor>'.$autor_nombre.$autor_bio.'</autor>';
+		}
+		$output = $output.$autor;
 	}
 	//////////////////////
 
 	//INDTRODUCCION//////////////
 	$introduccion_items = field_get_items('node', $node, 'field_introduccion');
-	$introduccion = '<field_introduccion>'.$introduccion_items[0]['safe_value'].'</field_introduccion>';
+	if(isset($introduccion_items)){
+		$introduccion = '<introduccion>'.$introduccion_items[0]['safe_value'].'</introduccion>';
+		$output = $output.$introduccion;
 	//////////////////////
+	}
 
 	//PROBLEMATICA_DEL_CAMPO//////////////
 	$problematica_items = field_get_items('node', $node, 'field_problematica_del_campo');
-	$problematica = '<field_problematica_del_campo>'.$introduccion_items[0]['safe_value'].'</field_problematica_del_campo>';
+	if(isset($problematica_items)){
+	$problematica = '<problematica_del_campo>'.$introduccion_items[0]['safe_value'].'</problematica_del_campo>';
+		$output = $output.$problematica;
+	//////////////////////
+	}
+
+	//FIELD_REFLEXIONES//////////////
+	$reflexiones_items = field_get_items('node', $node, 'field_reflexiones');
+	if(isset($reflexiones_items)){	
+		$reflexiones = '<reflexiones>'.$reflexiones_items[0]['safe_value'].'</reflexiones>';
+		$output = $output.$reflexiones;
+	//////////////////////
+	}
+
+	//FIELD_MAPA_CONCEPTUAL//////////////
+	$mapa_items = field_get_items('node', $node, 'field_mapa_conceptual');
+	if(isset($mapa_items)){
+		$mapa = '<mapa_conceptual>'.$mapa_items[0]['uri'].'</mapa_conceptual>';
+		//return print_r($mapa_items);
+		$output = $output.$mapa;
+	//////////////////////
+	}
+
+	//FIELD_OBJETIVOS_DEL_CURSO//////////////
+	$objetivos_items = field_get_items('node', $node, 'field_objetivos_del_curso');
+	if(isset($objetivos_items)){
+		$objetivos = '<objetivos_del_curso>'.$objetivos_items[0]['safe_value'].'</objetivos_del_curso>';
+		$objetivos = $output.$objetivos;
+	}
+	//////////////////////
+
+	//UNIDAD//////////////
+	$unidad_items = field_get_items('node', $node, 'field_unidad');
+
+	$unidades = '';
+	if(isset($unidad_items)){
+		foreach ($unidad_items as $n_item => $unidad_item) {
+			$unidad_fc = field_collection_field_get_entity($unidad_item);
+			//return print_r($unidad_fc);
+			//return print_r($fc);
+			$fc_name = $unidad_fc->field_name;
+			
+			$unidad_titulo = '<titulo_de_la_unidad>'.$unidad_fc->field_titulo_de_la_unidad['und'][0]['safe_value'].'</titulo_de_la_unidad>';
+			$unidad_introduccion = '<introduccion_a_la_unidad>'.$unidad_fc->field_introduccion_a_la_unidad['und'][0]['safe_value'].'</introduccion_a_la_unidad>';
+			$unidad_objetivos = '<objetivos_de_la_unidad>'.$unidad_fc->field_objetivos_de_la_unidad['und'][0]['safe_value'].'</objetivos_de_la_unidad>';
+			
+			////RECURSOS////////
+			$unidad_recursos = $unidad_fc->field_recurso['und'];
+			$recursos = '';
+			if(isset($unidad_recursos)){
+				foreach ($unidad_recursos as $n_item => $unidad_recurso) {
+					$recurso_fc = field_collection_field_get_entity($unidad_recurso);
+					$recurso_fc_name = $recurso_fc->field_name;
+					//return print_r($recurso_fc->field_tipo_de_recurso);
+					$tipo_recurso = taxonomy_term_load($recurso_fc->field_tipo_de_recurso['und'][0]['tid']);
+					$tipo_name = $tipo_recurso->name;
+					$tipo_name = strtolower($tipo_name);
+					$tipo_name = str_replace(' ', '_', $tipo_name);
+
+					//$recurso_tipo = '<field_tipo_de_recurso>'.$tax_name.'</field_tipo_de_recurso>';
+					$recurso = '<recurso_'.$tipo_name.'>'.$recurso_fc->field_parrafo['und'][0]['safe_value'].'</recurso_'.$tipo_name.'>';
+					$recursos = $recursos.$recurso;
+
+				}
+			}
+			////RECURSOS////////
+
+			
+			
+			
+			
+			////////////////////
+
+			$unidades = $unidades.'<unidad>'.$unidad_titulo.$unidad_introduccion.$unidad_objetivos.$recursos.'</unidad>';
+		}
+		$output = $output.$unidades;
+	}
 	//////////////////////
 
 
 
+
+	///FINAL
 	///sum all fields
-	$output = '<carpeta>'.$autor.$introduccion.$problematica.'</carpeta>';
+	$output = $output.'</carpeta>';
 
 	//build XML document
 	$dom = new DOMDocument;
@@ -85,5 +168,23 @@ function node_xml($node) {
 	$dom->loadXML($output);
 	$dom->formatOutput = TRUE;
 	//echo $dom->saveXml();
+
+	
 	return '<pre>'.$dom->saveXml().'</pre>';
+	
+}
+
+
+
+function saveXML() {
+	header('Content-type: text/xml');
+	header('Expires: 0');
+	header('Pragma: no-cache');
+	header('Content-Disposition: attachment; filename="carpeta.xml"');
+	//$domExp = substr($domExp, 1);
+	ob_start();
+	echo $dom->saveXml();
+	ob_end_flush();
+	die();
+	
 }
