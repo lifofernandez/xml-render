@@ -149,7 +149,10 @@ function node_xml($node) {
 				foreach ($unidad_apartados as $n_item => $unidad_apartado) {
 					$apartado_fc = field_collection_field_get_entity($unidad_apartado);
 					//$apartado_fc_name = $apartado_fc->field_name;
-					$apartado_titulo = '<titulo_del_apartado>'.$apartado_fc->field_titulo_del_apartado['und'][0]['safe_value'].'</titulo_del_apartado>';
+					if(isset($apartado_fc->field_titulo_del_apartado))$apartado_titulo = '<titulo_del_apartado>'.$apartado_fc->field_titulo_del_apartado['und'][0]['safe_value'].'</titulo_del_apartado>';
+
+					
+
 
 					///APARTADOS RECURSOS
 					$apartado_recursos = $apartado_fc->field_recurso['und'];
@@ -174,10 +177,53 @@ function node_xml($node) {
 
 					
 
-					$apartados = $apartados.'<apartado>'.$apartado_titulo.$recursos.'</apartado>';
+					///SUB_APARTADOS
+					$unidad_sub_apartados = $apartado_fc->field_sub_apartado['und'];
+					$sub_apartados = '';
+					if(isset($unidad_sub_apartados)){
+						foreach ($unidad_sub_apartados as $n_item => $unidad_sub_apartado) {
+							$sub_apartado_fc = field_collection_field_get_entity($unidad_sub_apartado);
+							
+
+							if(isset($sub_apartado_fc->field_titulo_del_sub_apartado))$sub_apartado_titulo = '<titulo_del_sub_apartado>'.$sub_apartado_fc->field_titulo_del_sub_apartado['und'][0]['safe_value'].'</titulo_del_sub_apartado>';
+							//return var_dump($sub_apartado_titulo);
+
+							///SUB_APARTADOS RECURSOS
+							$sub_apartado_recursos = $sub_apartado_fc->field_recurso['und'];
+							$recursos = '';
+							if(isset($sub_apartado_recursos)){
+								foreach ($sub_apartado_recursos as $n_item => $sub_apartado_recurso) {
+									$sub_apartado_recurso_fc = field_collection_field_get_entity($sub_apartado_recurso);
+									$tipo_recurso = taxonomy_term_load($sub_apartado_recurso_fc->field_tipo_de_recurso['und'][0]['tid']);
+									$tipo_name = $tipo_recurso->name;
+									$tipo_name = strtolower($tipo_name);
+									$tipo_name = str_replace(' ', '_', $tipo_name);
+
+									$recurso = '<recurso_'.$tipo_name.'>'.$sub_apartado_recurso_fc->field_contenido['und'][0]['safe_value'].'</recurso_'.$tipo_name.'>';
+									$recursos = $recursos.$recurso;
+
+								}
+							}
+							//////////
+
+
+							
+
+							$sub_apartados = $sub_apartados.'<sub_apartado>'.$sub_apartado_titulo.$recursos.'</sub_apartado>';
+						}
+					}
+					////////////
+
+
+
+
+
+					
+
+					$apartados = $apartados.'<apartado>'.$apartado_titulo.$recursos.$sub_apartados.'</apartado>';
 				}
 			}
-			////APARTADOS////////
+			////////////
 
 			
 			
