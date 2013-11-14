@@ -141,15 +141,49 @@ function node_xml($node) {
 
 				}
 			}
-			////RECURSOS////////
+
+			///APARTADOS
+			$unidad_apartados = $unidad_fc->field_apartado['und'];
+			$apartados = '';
+			if(isset($unidad_apartados)){
+				foreach ($unidad_apartados as $n_item => $unidad_apartado) {
+					$apartado_fc = field_collection_field_get_entity($unidad_apartado);
+					//$apartado_fc_name = $apartado_fc->field_name;
+					$apartado_titulo = '<titulo_del_apartado>'.$apartado_fc->field_titulo_del_apartado['und'][0]['safe_value'].'</titulo_del_apartado>';
+
+					///APARTADOS RECURSOS
+					$apartado_recursos = $apartado_fc->field_recurso['und'];
+					$recursos = '';
+					if(isset($apartado_recursos)){
+						foreach ($apartado_recursos as $n_item => $apartado_recurso) {
+							$apartado_recurso_fc = field_collection_field_get_entity($apartado_recurso);
+							//$recurso_fc_name = $apartado_recurso_fc->field_name;
+							//return print_r($recurso_fc->field_tipo_de_recurso);
+							$tipo_recurso = taxonomy_term_load($apartado_recurso_fc->field_tipo_de_recurso['und'][0]['tid']);
+							$tipo_name = $tipo_recurso->name;
+							$tipo_name = strtolower($tipo_name);
+							$tipo_name = str_replace(' ', '_', $tipo_name);
+
+							//$recurso_tipo = '<field_tipo_de_recurso>'.$tax_name.'</field_tipo_de_recurso>';
+							$recurso = '<recurso_'.$tipo_name.'>'.$apartado_recurso_fc->field_contenido['und'][0]['safe_value'].'</recurso_'.$tipo_name.'>';
+							$recursos = $recursos.$recurso;
+
+						}
+					}
+					//////////
+
+					
+
+					$apartados = $apartados.'<apartado>'.$apartado_titulo.$recursos.'</apartado>';
+				}
+			}
+			////APARTADOS////////
 
 			
 			
 			
-			
-			////////////////////
 
-			$unidades = $unidades.'<unidad>'.$unidad_titulo.$unidad_introduccion.$unidad_objetivos.$recursos.'</unidad>';
+			$unidades = $unidades.'<unidad>'.$unidad_titulo.$unidad_introduccion.$unidad_objetivos.$recursos.$apartados.'</unidad>';
 		}
 		$output = $output.$unidades;
 	}
