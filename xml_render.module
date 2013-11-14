@@ -136,7 +136,7 @@ function node_xml($node) {
 					$tipo_name = str_replace(' ', '_', $tipo_name);
 
 					//$recurso_tipo = '<field_tipo_de_recurso>'.$tax_name.'</field_tipo_de_recurso>';
-					$recurso = '<recurso_'.$tipo_name.'>'.$recurso_fc->field_parrafo['und'][0]['safe_value'].'</recurso_'.$tipo_name.'>';
+					$recurso = '<recurso_'.$tipo_name.'>'.$recurso_fc->field_contenido['und'][0]['safe_value'].'</recurso_'.$tipo_name.'>';
 					$recursos = $recursos.$recurso;
 
 				}
