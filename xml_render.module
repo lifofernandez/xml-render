@@ -45,7 +45,11 @@ function node_xml($node) {
  	// return t('Hello node with id !nid', array('!nid' => $node->nid));
  	// return print_r($node);
 	
-	
+	if(isset($node->title)){
+		$titulo_de_la_carpeta = $node->title;
+		$output = $output.'<titulo_de_la_carpeta>'.$titulo_de_la_carpeta.'</titulo_de_la_carpeta>';
+	}
+
 	$wrapper = entity_metadata_wrapper('node', $node);
 
 	//AUTOR//////////////
@@ -248,23 +252,31 @@ function node_xml($node) {
 	$dom->loadXML($output);
 	$dom->formatOutput = TRUE;
 	//echo $dom->saveXml();
-
 	
-	return '<pre>'.$dom->saveXml().'</pre>';
+	$XML_output = $dom->saveXml();
+	saveXML($titulo_de_la_carpeta, $XML_output);
+	
+	//return '<pre>'.$dom->saveXml().'</pre>';
 	
 }
 
 
 
-function saveXML() {
+function saveXML($titulo,$contenido) {
+
+	$titulo = strtolower($titulo);
+	$titulo = str_replace(' ', '_', $titulo);
+	$filename = $titulo.".xml";
+
 	header('Content-type: text/xml');
 	header('Expires: 0');
 	header('Pragma: no-cache');
-	header('Content-Disposition: attachment; filename="carpeta.xml"');
-	//$domExp = substr($domExp, 1);
+  	header("Content-disposition: attachment; filename=$filename");
+
 	ob_start();
-	echo $dom->saveXml();
+	echo $contenido;
 	ob_end_flush();
+	
 	die();
 	
 }
