@@ -29,8 +29,8 @@ function xml_render_menu() {
     'title' => 'Descargar XML',
     'page callback' => 'node_xml',
     'page arguments' => array(1),
-    'access callback' => 'node_access',
-    'access arguments' => array('update', 1),
+    'access callback' => 'carpeta_access_callback',
+    'access arguments' => array(1), 
     'weight' => 0,
     'type' => MENU_LOCAL_TASK,
     'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
@@ -39,7 +39,9 @@ function xml_render_menu() {
   return $items;
 }
 
-
+function carpeta_access_callback($node) {
+  return $node->type == 'carpeta' && user_access('node_access');
+}
 
 function node_xml($node) {
 	$output = '<carpeta>';
