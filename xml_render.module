@@ -16,7 +16,7 @@
 function xml_render_help($path, $arg) {
   switch ($path) {
     case "admin/help#xml_render":
-      return '<p>' . t("Genera xml del contenido CARPETA") . '</p>';
+      return '<p>' . t("en la vista del CARPETA simplemente clickear la pestaña 'Generar XML' para descargar el .xml ") . '</p>';
       break;
   }
 } 
@@ -38,6 +38,8 @@ function xml_render_menu() {
   );
   return $items;
 }
+
+
 
 function node_xml($node) {
 	$output = '<carpeta>';
