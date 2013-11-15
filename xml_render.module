@@ -1,4 +1,4 @@
- <?php 
+<?php 
 
  //setlocale(LC_ALL,"es_ES");
 
@@ -26,7 +26,6 @@ function xml_render_help($path, $arg) {
  * Implements hook_menu().
  */
 function xml_render_menu() {
-
   $items['node/%node/xml'] = array(
     'title' => 'XML',
     'page callback' => 'node_xml',
@@ -38,14 +37,12 @@ function xml_render_menu() {
     'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
     //'file' => 'node.pages.inc',
   );
-
   return $items;
 }
 
 
 function node_xml($node) {
 	$output = '<carpeta>';
-
  	// return t('Hello node with id !nid', array('!nid' => $node->nid));
  	// return print_r($node);
 	
@@ -257,7 +254,7 @@ function node_xml($node) {
 
 	//build XML document
 	$dom = new DOMDocument;
-	$dom->preserveWhiteSpace = FALSE;
+	//$dom->preserveWhiteSpace = FALSE;
 	$dom->loadXML($output);
 	$dom->formatOutput = TRUE;
 	//echo $dom->saveXml();
@@ -265,30 +262,27 @@ function node_xml($node) {
 	$XML_output = $dom->saveXml();
 	saveXML($titulo_de_la_carpeta, $XML_output);
 	
-	//return '<pre>'.$dom->saveXml().'</pre>';
+	//return '<pre>'.$XML_output.'</pre>';
 	
 }
 
 
 
 function saveXML($titulo,$contenido) {
-
 	$titulo = strtolower($titulo);
 	$titulo = str_replace(' ', '_', $titulo);
 	$titulo = normalizeChars($titulo);
 	$filename = $titulo.".xml";
-
-	header('Content-type: text/xml');
-	header('Expires: 0');
-	header('Pragma: no-cache');
-  	header("Content-disposition: attachment; filename=$filename");
-
 	ob_start();
-	echo $contenido;
+	header('Pragma: public');
+	header('Expires: 0');
+	header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+	header('Content-Type: text/xml');
+	header('Content-Disposition: attachment; filename="'.$filename.'"');
+	header('Content-Transfer-Encoding: 7bit');
+  	echo($contenido);
 	ob_end_flush();
-	
-	die();
-	
+	//die();
 }
 
 function normalizeChars($s) {
