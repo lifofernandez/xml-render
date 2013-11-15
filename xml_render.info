@@ -1,3 +1,12 @@
+; Modulo para exportar Carpetas de contendios como XML
+
+; desarrollado por Lisandro Fernandez para: 
+; Dirección de Materiales Didácticos
+; Secretaría de Educación Virtual
+; Universidad Nacional de Quilmes
+
 name = XML render
-description = a simple XML render for content.
+description = a simple XML render for a specific custom type content, not for general use already.
 core = 7.x
+dependencies[] = field_collection
+dependencies[] = field_collection_fieldset
