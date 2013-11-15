@@ -16,7 +16,7 @@
 function xml_render_help($path, $arg) {
   switch ($path) {
     case "admin/help#xml_render":
-      return '<p>' . t("Displays xml of the content") . '</p>';
+      return '<p>' . t("Genera xml del contenido CARPETA") . '</p>';
       break;
   }
 } 
@@ -39,13 +39,10 @@ function xml_render_menu() {
   return $items;
 }
 
-
 function node_xml($node) {
 	$output = '<carpeta>';
-	
  	// return t('Hello node with id !nid', array('!nid' => $node->nid));
- 	// return print_r($node);
-	
+
 	if(isset($node->title)){
 		$titulo_de_la_carpeta = $node->title;
 		$output = $output.'<carpeta_titulo>'.$titulo_de_la_carpeta.'</carpeta_titulo>';
@@ -53,7 +50,7 @@ function node_xml($node) {
 
 	$wrapper = entity_metadata_wrapper('node', $node);
 
-	//AUTOR//////////////
+	//AUTOR////////////////////////////
 	$autor_items = field_get_items('node', $node, 'field_autor');
 	$autor = '';
 	if(isset($autor_items)){
@@ -69,16 +66,15 @@ function node_xml($node) {
 		}
 		$output = $output.$autor;
 	}
-	//////////////////////
+	//termina autor///////////////////////
 
-	//INDTRODUCCION//////////////
+	//INDTRODUCCION///////////////////////
 	$introduccion_items = field_get_items('node', $node, 'field_introduccion');
 	if(isset($introduccion_items)){
 		$introduccion = '<carpeta_introduccion>'.$introduccion_items[0]['safe_value'].'</carpeta_introduccion>';
 		$output = $output.$introduccion;
 	}
-	//////////////////////
-
+	//////////////////////////////////////
 
 	//PROBLEMATICA_DEL_CAMPO//////////////
 	$problematica_items = field_get_items('node', $node, 'field_problematica_del_campo');
@@ -86,15 +82,15 @@ function node_xml($node) {
 	$problematica = '<carpeta_problematica>'.$introduccion_items[0]['safe_value'].'</carpeta_problematica>';
 		$output = $output.$problematica;
 	}
-	//////////////////////
+	//////////////////////////////////////
 
-	//FIELD_REFLEXIONES//////////////
+	//FIELD_REFLEXIONES//////////////////
 	$reflexiones_items = field_get_items('node', $node, 'field_reflexiones');
 	if(isset($reflexiones_items)){	
 		$reflexiones = '<carpeta_reflexiones>'.$reflexiones_items[0]['safe_value'].'</carpeta_reflexiones>';
 		$output = $output.$reflexiones;
 	}
-	//////////////////////
+	/////////////////////////////////////
 
 	//FIELD_MAPA_CONCEPTUAL//////////////
 	$mapa_items = field_get_items('node', $node, 'field_mapa_conceptual');
@@ -103,8 +99,7 @@ function node_xml($node) {
 		//return print_r($mapa_items);
 		$output = $output.$mapa;
 	}
-	//////////////////////
-
+	////////////////////////////////////
 
 	//FIELD_OBJETIVOS_DEL_CURSO//////////////
 	$objetivos_items = field_get_items('node', $node, 'field_objetivos_del_curso');
@@ -112,11 +107,9 @@ function node_xml($node) {
 		$objetivos = '<carpeta_objetivos>'.$objetivos_items[0]['safe_value'].'</carpeta_objetivos>';
 		$objetivos = $output.$objetivos;
 	}
-	//////////////////////
+	////////////////////////////////////////
 
-
-
-	//UNIDAD//////////////
+	//UNIDADES////////////////////////////////
 	$unidad_items = field_get_items('node', $node, 'field_unidad');
 
 	$unidades = '';
@@ -132,29 +125,28 @@ function node_xml($node) {
 			$unidad_introduccion = '<unidad_introduccion>'.$unidad_fc->field_introduccion_a_la_unidad['und'][0]['safe_value'].'</unidad_introduccion>';
 			$unidad_objetivos = '<unidad_objetivos>'.$unidad_fc->field_objetivos_de_la_unidad['und'][0]['safe_value'].'</unidad_objetivos>';
 			
-			////RECURSOS////////
+			////RECURSOS////////////////////////////
 			$unidad_recursos = $unidad_fc->field_recurso['und'];
 			$recursos = '';
 			if(isset($unidad_recursos)){
 				foreach ($unidad_recursos as $n_item => $unidad_recurso) {
 					$recurso_fc = field_collection_field_get_entity($unidad_recurso);
 					$recurso_fc_name = $recurso_fc->field_name;
-					//return print_r($recurso_fc->field_tipo_de_recurso);
+
 					$tipo_recurso = taxonomy_term_load($recurso_fc->field_tipo_de_recurso['und'][0]['tid']);
 					$tipo_name = $tipo_recurso->name;
 					$tipo_name = strtolower($tipo_name);
 					$tipo_name = str_replace(' ', '_', $tipo_name);
 					$tipo_name = normalizeChars($tipo_name);
 					
-
-					//$recurso_tipo = '<field_tipo_de_recurso>'.$tax_name.'</field_tipo_de_recurso>';
 					$recurso = '<recurso_'.$tipo_name.'>'.$recurso_fc->field_contenido['und'][0]['safe_value'].'</recurso_'.$tipo_name.'>';
 					$recursos = $recursos.$recurso;
 
 				}
 			}
-
-			///APARTADOS
+			//termina recursos////////////////////////
+			
+			///APARTADOS//////////////////////////////
 			$unidad_apartados = $unidad_fc->field_apartado['und'];
 			$apartados = '';
 			if(isset($unidad_apartados)){
@@ -164,10 +156,7 @@ function node_xml($node) {
 					$apartado_titulo = '';
 					if(isset($apartado_fc->field_titulo_del_apartado))$apartado_titulo = '<apartado_titulo>'.$apartado_fc->field_titulo_del_apartado['und'][0]['safe_value'].'</apartado_titulo>';
 
-					
-
-
-					///APARTADOS RECURSOS
+					///APARTADOS RECURSOS/////////////////////////
 					$apartado_recursos = $apartado_fc->field_recurso['und'];
 					$recursos = '';
 					if(isset($apartado_recursos)){
@@ -187,11 +176,9 @@ function node_xml($node) {
 
 						}
 					}
-					//////////
+					//termina apartado recursos/////////////////////
 
-					
-
-					///SUB_APARTADOS
+					///SUB_APARTADOS////////////////////////////////
 					$unidad_sub_apartados = $apartado_fc->field_sub_apartado['und'];
 					$sub_apartados = '';
 					if(isset($unidad_sub_apartados)){
@@ -202,7 +189,7 @@ function node_xml($node) {
 							if(isset($sub_apartado_fc->field_titulo_del_sub_apartado))$sub_apartado_titulo = '<sub_apartado_titulo>'.$sub_apartado_fc->field_titulo_del_sub_apartado['und'][0]['safe_value'].'</sub_apartado_titulo>';
 							//return var_dump($sub_apartado_titulo);
 
-							///SUB_APARTADOS RECURSOS
+							///SUB_APARTADOS RECURSOS//////////////////////
 							$sub_apartado_recursos = $sub_apartado_fc->field_recurso['und'];
 							$recursos = '';
 							if(isset($sub_apartado_recursos)){
@@ -219,33 +206,23 @@ function node_xml($node) {
 
 								}
 							}
-							//////////
-
-
-							
-
+							//termina sub apartado recursos////////////////////
 							$sub_apartados = $sub_apartados.'<sub_apartado>'.$sub_apartado_titulo.$recursos.'</sub_apartado>';
+					
 						}
 					}
-					////////////
-
-
-			
-
+					//termina sub apartados////////////////////////////
 					$apartados = $apartados.'<apartado>'.$apartado_titulo.$recursos.$sub_apartados.'</apartado>';
+				
 				}
 			}
-			////////////
-
-			
-			
-			
-
+			//termina apartados////////////////////////////
 			$unidades = $unidades.'<unidad>'.$unidad_titulo.$unidad_introduccion.$unidad_objetivos.$recursos.$apartados.'</unidad>';
+	
 		}
 		$output = $output.$unidades;
 	}
-	//////////////////////
+	//termina unidades////////////////////////////
 
 
 
@@ -256,7 +233,7 @@ function node_xml($node) {
 
 	//build XML document
 	$dom = new DOMDocument;
-	//$dom->preserveWhiteSpace = FALSE;
+	$dom->preserveWhiteSpace = FALSE;
 	$dom->loadXML($output);
 	$dom->formatOutput = TRUE;
 	//echo $dom->saveXml();
