@@ -1,28 +1,8 @@
 <?php 
-
 //setlocale(LC_ALL,"es_ES");
 
 /**
- * Implements hook_help.
- *
- * Displays help and module information.
- *
- * @param path
- *   Which path of the site we're using to display help
- * @param arg
- *   Array that holds the current path as returned from arg() function
- */
-
-function xml_render_help($path, $arg) {
-  switch ($path) {
-    case "admin/help#xml_render":
-      return '<p>' . t("en la vista de la CARPETA simplemente clickear la pestaña 'Generar XML' para descargar el .xml ") . '</p>';
-      break;
-  }
-} 
-
-/**
- * Implements hook_menu().
+ * Implements hook_menu() for node carpeta.
  */
 function xml_render_menu() {
   $items['node/%node/xml'] = array(
@@ -234,10 +214,12 @@ function node_xml($node) {
 			//termina apartados////////////////////////////
 
 			///REFERECIAS BIBLIOGRAFICAS///////
-			///////////////////////////////////
+			$unidad_bibliografia = '';
+			if(isset($unidad_fc->field_referencias_bibliograficas))$unidad_bibliografia = '<unidad_bibliografia>'.$unidad_fc->field_referencias_bibliograficas['und'][0]['safe_value'].'</unidad_bibliografia>';
+			///////////////////////////
 
 
-			$unidades = $unidades.'<unidad>'.$unidad_titulo.$unidad_introduccion.$unidad_objetivos.$recursos.$apartados.'</unidad>';
+			$unidades = $unidades.'<unidad>'.$unidad_titulo.$unidad_introduccion.$unidad_objetivos.$recursos.$apartados.$unidad_bibliografia.'</unidad>';
 	
 		}
 		$output = $output.$unidades;
@@ -304,3 +286,22 @@ function normalizeChars($s) {
  );
  return strtr($s, $replace);
 }
+
+
+/**
+ * Implements hook_help.
+ *
+ * Displays help and module information.
+ *
+ * @param path
+ *   Which path of the site we're using to display help
+ * @param arg
+ *   Array that holds the current path as returned from arg() function
+ */
+function xml_render_help($path, $arg) {
+  switch ($path) {
+    case "admin/help#xml_render":
+      return '<p>' . t("en la vista de la CARPETA simplemente clickear la pestaña 'Generar XML' para descargar el .xml ") . '</p>';
+      break;
+  }
+} 
