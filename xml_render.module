@@ -24,6 +24,7 @@ function carpeta_access_callback($node) {
   return $node->type == 'carpeta' && user_access('node_access');
 }
 
+///collect field and field collection values
 function node_xml($node) {
 	$output = '<carpeta>';
  	// return t('Hello node with id !nid', array('!nid' => $node->nid));
@@ -40,12 +41,18 @@ function node_xml($node) {
 	$autor = '';
 	if(isset($autor_items)){
 		foreach ($autor_items as $autor_item) {
-			$fc = field_collection_field_get_entity($autor_item);
-			//return print_r($fc);
-			$fc_name = $fc->field_name;
-			
-			$autor_nombre = '<autor_nombre>'.$fc->field_nombre['und'][0]['safe_value'].'</autor_nombre>';
-			$autor_bio = '<autor_biografia>'.$fc->field_biografia['und'][0]['safe_value'].'</autor_biografia>';
+			$fc_autor = field_collection_field_get_entity($autor_item);
+			//$fc_name = $fc->field_name;
+
+			///AUTOR NOMBRE///////
+			$autor_nombre = '';
+			if(isset($fc_autor->field_nombre))$autor_nombre = '<autor_nombre>'.$fc_autor->field_nombre['und'][0]['safe_value'].'</autor_nombre>';
+			//////////////////////////////////
+
+			///AUTOR BIO///////
+			$autor_bio = '';
+			if(isset($fc_autor->field_biografia))$autor_bio = '<autor_biografia>'.$fc_autor->field_biografia['und'][0]['safe_value'].'</autor_biografia>';
+			//////////////////////
 			
 			$autor ='<autor>'.$autor_nombre.$autor_bio.'</autor>';
 		}
@@ -233,7 +240,7 @@ function node_xml($node) {
 	///sum all fields
 	$output = $output.'</carpeta>';
 
-	//build XML document
+	//build XML DOM
 	$dom = new DOMDocument;
 	$dom->preserveWhiteSpace = FALSE;
 	$dom->loadXML($output);
