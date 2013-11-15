@@ -16,7 +16,7 @@
 function xml_render_help($path, $arg) {
   switch ($path) {
     case "admin/help#xml_render":
-      return '<p>' . t("en la vista del CARPETA simplemente clickear la pestaña 'Generar XML' para descargar el .xml ") . '</p>';
+      return '<p>' . t("en la vista de la CARPETA simplemente clickear la pestaña 'Generar XML' para descargar el .xml ") . '</p>';
       break;
   }
 } 
@@ -39,6 +39,7 @@ function xml_render_menu() {
   return $items;
 }
 
+///create XML tab only for specific custom content type
 function carpeta_access_callback($node) {
   return $node->type == 'carpeta' && user_access('node_access');
 }
@@ -124,10 +125,20 @@ function node_xml($node) {
 			//return print_r($fc);
 			$fc_name = $unidad_fc->field_name;
 			
-			///TO DO: agregar condicionales isset
-			$unidad_titulo = '<unidad_titulo>'.$unidad_fc->field_titulo_de_la_unidad['und'][0]['safe_value'].'</unidad_titulo>';
-			$unidad_introduccion = '<unidad_introduccion>'.$unidad_fc->field_introduccion_a_la_unidad['und'][0]['safe_value'].'</unidad_introduccion>';
-			$unidad_objetivos = '<unidad_objetivos>'.$unidad_fc->field_objetivos_de_la_unidad['und'][0]['safe_value'].'</unidad_objetivos>';
+			///UNIDAD TITULO///////////
+			$unidad_titulo = '';
+			if(isset($unidad_fc->field_titulo_de_la_unidad))$unidad_titulo = '<unidad_titulo>'.$unidad_fc->field_titulo_de_la_unidad['und'][0]['safe_value'].'</unidad_titulo>';
+			/////////////////////////// 
+
+			///UNIDAD INTRODUCCION/////
+			$unidad_introduccion = '';
+			if(isset($unidad_fc->field_introduccion_a_la_unidad))$unidad_introduccion = '<unidad_introduccion>'.$unidad_fc->field_introduccion_a_la_unidad['und'][0]['safe_value'].'</unidad_introduccion>';
+			/////////////////////////// 
+
+			///UNIDAD OBJETIVOS////////
+			$unidad_objetivos = '';
+			if(isset($unidad_fc->field_objetivos_de_la_unidad))$unidad_objetivos = '<unidad_objetivos>'.$unidad_fc->field_objetivos_de_la_unidad['und'][0]['safe_value'].'</unidad_objetivos>';
+			///////////////////////////
 			
 			////RECURSOS////////////////////////////
 			$unidad_recursos = $unidad_fc->field_recurso['und'];
@@ -221,6 +232,11 @@ function node_xml($node) {
 				}
 			}
 			//termina apartados////////////////////////////
+
+			///REFERECIAS BIBLIOGRAFICAS///////
+			///////////////////////////////////
+
+
 			$unidades = $unidades.'<unidad>'.$unidad_titulo.$unidad_introduccion.$unidad_objetivos.$recursos.$apartados.'</unidad>';
 	
 		}
