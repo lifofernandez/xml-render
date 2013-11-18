@@ -61,11 +61,8 @@ function node_xml($node) {
 	//termina autor///////////////////////
 
 	//INDTRODUCCION///////////////////////
-	$introduccion_items = field_get_items('node', $node, 'field_introduccion');
-	if(isset($introduccion_items)){
-		$introduccion = '<carpeta_introduccion>'.$introduccion_items[0]['safe_value'].'</carpeta_introduccion>';
-		$output = $output.$introduccion;
-	}
+	$introduccion = get_field_regular($node, 'field_introduccion');
+	$output = $output.$introduccion;
 	//////////////////////////////////////
 
 	//PROBLEMATICA_DEL_CAMPO//////////////
@@ -312,3 +309,25 @@ function xml_render_help($path, $arg) {
       break;
   }
 } 
+
+//////FUNCIONE PARA EXTRAER FIELDS
+
+///fields comunes (no coleccion de fields)
+function get_field_regular($node, $field){
+
+	$field_items = field_get_items('node', $node, $field);
+	$field_name = str_replace('field_', '', $field);
+
+	$fields_output = '';
+
+	if(isset($field_items)){
+		foreach ($field_items as $n_item => $field_item) {
+			$field_value = $field_item[0]['safe_value'];
+
+			$fields_output = $fields_output.'<'.$field_name.'>'.$field_value.'</'.$field_name.'>';
+		}
+	}
+
+	return $fields_output;
+
+}
