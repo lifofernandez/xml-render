@@ -306,17 +306,17 @@ function xml_render_help($path, $arg) {
 ///fields comunes (no coleccion de fields)
 function get_field_regular($node, $field){
 
-	$field_item = field_get_items('node', $node, $field);
+	$field_items = field_get_items('node', $node, $field);
 	$field_name = str_replace('field_', '', $field);
 
 	$fields_output = '';
 
-	//if(isset($field_items)){
-	//	foreach ($field_items as $n_item => $field_item) {
-			$field_value = $field_item[0]['safe_value'];
+	if(isset($field_items)){
+		foreach ($field_items as $n_item => $field_item) {
+			$field_value = $field_item['safe_value'];
 			$fields_output = $fields_output.'<'.$field_name.'>'.$field_value.'</'.$field_name.'>';
-	//	}
-	//}
+		}
+	}
 
 	return $fields_output;
 
