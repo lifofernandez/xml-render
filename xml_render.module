@@ -66,19 +66,13 @@ function node_xml($node) {
 	//////////////////////////////////////
 
 	//PROBLEMATICA_DEL_CAMPO//////////////
-	$problematica_items = field_get_items('node', $node, 'field_problematica_del_campo');
-	if(isset($problematica_items)){
-	$problematica = '<carpeta_problematica>'.$introduccion_items[0]['safe_value'].'</carpeta_problematica>';
-		$output = $output.$problematica;
-	}
+	$problematica = get_field_regular($node, 'field_problematica_del_campo');
+	$output = $output.$problematica;
 	//////////////////////////////////////
 
 	//FIELD_REFLEXIONES//////////////////
-	$reflexiones_items = field_get_items('node', $node, 'field_reflexiones');
-	if(isset($reflexiones_items)){	
-		$reflexiones = '<carpeta_reflexiones>'.$reflexiones_items[0]['safe_value'].'</carpeta_reflexiones>';
-		$output = $output.$reflexiones;
-	}
+	$reflexiones = get_field_regular($node, 'field_reflexiones');
+	$output = $output.$reflexiones;
 	/////////////////////////////////////
 
 	//FIELD_MAPA_CONCEPTUAL//////////////
@@ -91,11 +85,8 @@ function node_xml($node) {
 	////////////////////////////////////
 
 	//FIELD_OBJETIVOS_DEL_CURSO//////////////
-	$objetivos_items = field_get_items('node', $node, 'field_objetivos_del_curso');
-	if(isset($objetivos_items)){
-		$objetivos = '<carpeta_objetivos>'.$objetivos_items[0]['safe_value'].'</carpeta_objetivos>';
-		$objetivos = $output.$objetivos;
-	}
+	$objetivos = get_field_regular($node, 'field_objetivos_del_curso');
+	$output = $output.$objetivos;
 	////////////////////////////////////////
 
 	//UNIDADES////////////////////////////////
@@ -315,18 +306,17 @@ function xml_render_help($path, $arg) {
 ///fields comunes (no coleccion de fields)
 function get_field_regular($node, $field){
 
-	$field_items = field_get_items('node', $node, $field);
+	$field_item = field_get_items('node', $node, $field);
 	$field_name = str_replace('field_', '', $field);
 
 	$fields_output = '';
 
-	if(isset($field_items)){
-		foreach ($field_items as $n_item => $field_item) {
+	//if(isset($field_items)){
+	//	foreach ($field_items as $n_item => $field_item) {
 			$field_value = $field_item[0]['safe_value'];
-
 			$fields_output = $fields_output.'<'.$field_name.'>'.$field_value.'</'.$field_name.'>';
-		}
-	}
+	//	}
+	//}
 
 	return $fields_output;
 
