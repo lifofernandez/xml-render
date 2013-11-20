@@ -253,7 +253,7 @@ function saveXML($titulo,$contenido) {
 	header('Content-Type: text/xml');
 	header('Content-Disposition: attachment; filename="'.$filename.'"');
 	header('Content-Transfer-Encoding: 7bit');
-  echo($contenido);
+  	echo($contenido);
 	ob_end_flush();
 	die();
 }
@@ -304,6 +304,8 @@ function xml_render_help($path, $arg) {
 //////FUNCIONE PARA EXTRAER FIELDS
 
 ///fields comunes (no coleccion de fields)
+/// 1st param = node element 2nd param = field name;
+
 function get_field_regular($node, $field){
 
 	$field_items = field_get_items('node', $node, $field);
