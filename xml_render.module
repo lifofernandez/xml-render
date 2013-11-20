@@ -46,12 +46,12 @@ function node_xml($node) {
 
 			///AUTOR NOMBRE///////
 			$autor_nombre = '';
-			if(isset($fc_autor->field_nombre))$autor_nombre = '<autor_nombre>'.$fc_autor->field_nombre['und'][0]['safe_value'].'</autor_nombre>';
+			if(isset($fc_autor->field_nombre))$autor_nombre = '<autor_nombre>'.$fc_autor->field_autor_nombre['und'][0]['safe_value'].'</autor_nombre>';
 			//////////////////////////////////
 
 			///AUTOR BIO///////
 			$autor_bio = '';
-			if(isset($fc_autor->field_biografia))$autor_bio = '<autor_biografia>'.$fc_autor->field_biografia['und'][0]['safe_value'].'</autor_biografia>';
+			if(isset($fc_autor->field_biografia))$autor_bio = '<autor_biografia>'.$fc_autor->field_autor_biografia['und'][0]['safe_value'].'</autor_biografia>';
 			//////////////////////
 			
 			$autor ='<autor>'.$autor_nombre.$autor_bio.'</autor>';
@@ -98,21 +98,21 @@ function node_xml($node) {
 			$unidad_fc = field_collection_field_get_entity($unidad_item);
 			//return print_r($unidad_fc);
 			//return print_r($fc);
-			$fc_name = $unidad_fc->field_name;
+			//$fc_name = $unidad_fc->field_name;
 			
 			///UNIDAD TITULO///////////
 			$unidad_titulo = '';
-			if(isset($unidad_fc->field_titulo_de_la_unidad))$unidad_titulo = '<unidad_titulo>'.$unidad_fc->field_titulo_de_la_unidad['und'][0]['safe_value'].'</unidad_titulo>';
+			if(isset($unidad_fc->field_unidad_titulo))$unidad_titulo = '<unidad_titulo>'.$unidad_fc->field_unidad_titulo['und'][0]['safe_value'].'</unidad_titulo>';
 			/////////////////////////// 
 
 			///UNIDAD INTRODUCCION/////
 			$unidad_introduccion = '';
-			if(isset($unidad_fc->field_introduccion_a_la_unidad))$unidad_introduccion = '<unidad_introduccion>'.$unidad_fc->field_introduccion_a_la_unidad['und'][0]['safe_value'].'</unidad_introduccion>';
+			if(isset($unidad_fc->field_unidad_introduccion))$unidad_introduccion = '<unidad_introduccion>'.$unidad_fc->field_unidad_introduccion['und'][0]['safe_value'].'</unidad_introduccion>';
 			/////////////////////////// 
 
 			///UNIDAD OBJETIVOS////////
 			$unidad_objetivos = '';
-			if(isset($unidad_fc->field_objetivos_de_la_unidad))$unidad_objetivos = '<unidad_objetivos>'.$unidad_fc->field_objetivos_de_la_unidad['und'][0]['safe_value'].'</unidad_objetivos>';
+			if(isset($unidad_fc->field_unidad_objetivos))$unidad_objetivos = '<unidad_objetivos>'.$unidad_fc->field_unidad_objetivos['und'][0]['safe_value'].'</unidad_objetivos>';
 			///////////////////////////
 			
 			////RECURSOS////////////////////////////
@@ -121,15 +121,15 @@ function node_xml($node) {
 			if(isset($unidad_recursos)){
 				foreach ($unidad_recursos as $n_item => $unidad_recurso) {
 					$recurso_fc = field_collection_field_get_entity($unidad_recurso);
-					$recurso_fc_name = $recurso_fc->field_name;
+					//$recurso_fc_name = $recurso_fc->field_name;
 
-					$tipo_recurso = taxonomy_term_load($recurso_fc->field_tipo_de_recurso['und'][0]['tid']);
+					$tipo_recurso = taxonomy_term_load($recurso_fc->field_recurso_tipo['und'][0]['tid']);
 					$tipo_name = $tipo_recurso->name;
 					$tipo_name = strtolower($tipo_name);
 					$tipo_name = str_replace(' ', '_', $tipo_name);
 					$tipo_name = normalizeChars($tipo_name);
 					
-					$recurso = '<recurso_'.$tipo_name.'>'.$recurso_fc->field_contenido['und'][0]['safe_value'].'</recurso_'.$tipo_name.'>';
+					$recurso = '<recurso_'.$tipo_name.'>'.$recurso_fc->field_recurso_contenido['und'][0]['safe_value'].'</recurso_'.$tipo_name.'>';
 					$recursos = $recursos.$recurso;
 
 				}
@@ -144,7 +144,7 @@ function node_xml($node) {
 					$apartado_fc = field_collection_field_get_entity($unidad_apartado);
 					//$apartado_fc_name = $apartado_fc->field_name;
 					$apartado_titulo = '';
-					if(isset($apartado_fc->field_titulo_del_apartado))$apartado_titulo = '<apartado_titulo>'.$apartado_fc->field_titulo_del_apartado['und'][0]['safe_value'].'</apartado_titulo>';
+					if(isset($apartado_fc->field_apartado_titulo))$apartado_titulo = '<apartado_titulo>'.$apartado_fc->field_titulo_del_apartado['und'][0]['safe_value'].'</apartado_titulo>';
 
 					///APARTADOS RECURSOS/////////////////////////
 					$apartado_recursos = $apartado_fc->field_recurso['und'];
@@ -154,14 +154,14 @@ function node_xml($node) {
 							$apartado_recurso_fc = field_collection_field_get_entity($apartado_recurso);
 							//$recurso_fc_name = $apartado_recurso_fc->field_name;
 							//return print_r($recurso_fc->field_tipo_de_recurso);
-							$tipo_recurso = taxonomy_term_load($apartado_recurso_fc->field_tipo_de_recurso['und'][0]['tid']);
+							$tipo_recurso = taxonomy_term_load($apartado_recurso_fc->field_recurso_tipo['und'][0]['tid']);
 							$tipo_name = $tipo_recurso->name;
 							$tipo_name = strtolower($tipo_name);
 							$tipo_name = str_replace(' ', '_', $tipo_name);
 							$tipo_name = normalizeChars($tipo_name);
 
 							//$recurso_tipo = '<field_tipo_de_recurso>'.$tax_name.'</field_tipo_de_recurso>';
-							$recurso = '<recurso_'.$tipo_name.'>'.$apartado_recurso_fc->field_contenido['und'][0]['safe_value'].'</recurso_'.$tipo_name.'>';
+							$recurso = '<recurso_'.$tipo_name.'>'.$apartado_recurso_fc->field_recurso_contenido['und'][0]['safe_value'].'</recurso_'.$tipo_name.'>';
 							$recursos = $recursos.$recurso;
 
 						}
@@ -169,14 +169,14 @@ function node_xml($node) {
 					//termina apartado recursos/////////////////////
 
 					///SUB_APARTADOS////////////////////////////////
-					$unidad_sub_apartados = $apartado_fc->field_sub_apartado['und'];
+					$unidad_sub_apartados = $apartado_fc->field_subapartado['und'];
 					$sub_apartados = '';
 					if(isset($unidad_sub_apartados)){
 						foreach ($unidad_sub_apartados as $n_item => $unidad_sub_apartado) {
 							$sub_apartado_fc = field_collection_field_get_entity($unidad_sub_apartado);
 							
 							$sub_apartado_titulo = '';
-							if(isset($sub_apartado_fc->field_titulo_del_sub_apartado))$sub_apartado_titulo = '<sub_apartado_titulo>'.$sub_apartado_fc->field_titulo_del_sub_apartado['und'][0]['safe_value'].'</sub_apartado_titulo>';
+							if(isset($sub_apartado_fc->field_subapartado_titulo))$sub_apartado_titulo = '<subapartado_titulo>'.$sub_apartado_fc->field_subapartado_titulo['und'][0]['safe_value'].'</subapartado_titulo>';
 							//return var_dump($sub_apartado_titulo);
 
 							///SUB_APARTADOS RECURSOS//////////////////////
@@ -185,13 +185,13 @@ function node_xml($node) {
 							if(isset($sub_apartado_recursos)){
 								foreach ($sub_apartado_recursos as $n_item => $sub_apartado_recurso) {
 									$sub_apartado_recurso_fc = field_collection_field_get_entity($sub_apartado_recurso);
-									$tipo_recurso = taxonomy_term_load($sub_apartado_recurso_fc->field_tipo_de_recurso['und'][0]['tid']);
+									$tipo_recurso = taxonomy_term_load($sub_apartado_recurso_fc->field_recurso_tipo['und'][0]['tid']);
 									$tipo_name = $tipo_recurso->name;
 									$tipo_name = strtolower($tipo_name);
 									$tipo_name = str_replace(' ', '_', $tipo_name);
 									$tipo_name = normalizeChars($tipo_name);
 
-									$recurso = '<recurso_'.$tipo_name.'>'.$sub_apartado_recurso_fc->field_contenido['und'][0]['safe_value'].'</recurso_'.$tipo_name.'>';
+									$recurso = '<recurso_'.$tipo_name.'>'.$sub_apartado_recurso_fc->field_recurso_contenido['und'][0]['safe_value'].'</recurso_'.$tipo_name.'>';
 									$recursos = $recursos.$recurso;
 
 								}
@@ -210,7 +210,7 @@ function node_xml($node) {
 
 			///REFERECIAS BIBLIOGRAFICAS///////
 			$unidad_bibliografia = '';
-			if(isset($unidad_fc->field_referencias_bibliograficas))$unidad_bibliografia = '<unidad_bibliografia>'.$unidad_fc->field_referencias_bibliograficas['und'][0]['safe_value'].'</unidad_bibliografia>';
+			if(isset($unidad_fc->field_unidad_bibliografia))$unidad_bibliografia = '<unidad_bibliografia>'.$unidad_fc->field_unidad_bibliografia['und'][0]['safe_value'].'</unidad_bibliografia>';
 			///////////////////////////
 
 
