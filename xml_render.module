@@ -21,7 +21,7 @@ function xml_render_menu() {
 
 ///create XML tab only for specific custom content type
 function carpeta_access_callback($node) {
-  return $node->type == 'carpeta' && user_access('node_access');
+  return $node->type == 'carpeta' ;
 }
 
 ///collect field and field collection values
