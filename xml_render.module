@@ -61,31 +61,27 @@ function node_xml($node) {
 	//termina autor///////////////////////
 
 	//INDTRODUCCION///////////////////////
-	$introduccion = get_field_regular($node, 'field_introduccion');
+	$introduccion = get_field_regular($node, 'field_introduccion','safe_value');
 	$output = $output.$introduccion;
 	//////////////////////////////////////
 
 	//PROBLEMATICA_DEL_CAMPO//////////////
-	$problematica = get_field_regular($node, 'field_problematica_del_campo');
+	$problematica = get_field_regular($node, 'field_problematica_del_campo','safe_value');
 	$output = $output.$problematica;
 	//////////////////////////////////////
 
 	//FIELD_REFLEXIONES//////////////////
-	$reflexiones = get_field_regular($node, 'field_reflexiones');
+	$reflexiones = get_field_regular($node, 'field_reflexiones','safe_value');
 	$output = $output.$reflexiones;
 	/////////////////////////////////////
 
 	//FIELD_MAPA_CONCEPTUAL//////////////
-	$mapa_items = field_get_items('node', $node, 'field_mapa_conceptual');
-	if(isset($mapa_items)){
-		$mapa = '<carpeta_mapa_conceptual>'.$mapa_items[0]['uri'].'</carpeta_mapa_conceptual>';
-		//return print_r($mapa_items);
-		$output = $output.$mapa;
-	}
+	$mapa = get_field_regular($node, 'field_mapa_conceptual','uri');
+	$output = $output.$mapa;
 	////////////////////////////////////
 
 	//FIELD_OBJETIVOS_DEL_CURSO//////////////
-	$objetivos = get_field_regular($node, 'field_objetivos_del_curso');
+	$objetivos = get_field_regular($node, 'field_objetivos_del_curso','safe_value');
 	$output = $output.$objetivos;
 	////////////////////////////////////////
 
@@ -304,9 +300,9 @@ function xml_render_help($path, $arg) {
 //////FUNCIONE PARA EXTRAER FIELDS
 
 ///fields comunes (no coleccion de fields)
-/// 1st param = node element 2nd param = field name;
+/// 1st param = node element, 2nd param = field name;  3nd param = tipe of value;
 
-function get_field_regular($node, $field){
+function get_field_regular($node, $field, $value_to_get){
 
 	$field_items = field_get_items('node', $node, $field);
 	$field_name = str_replace('field_', '', $field);
@@ -315,7 +311,7 @@ function get_field_regular($node, $field){
 
 	if(isset($field_items)){
 		foreach ($field_items as $n_item => $field_item) {
-			$field_value = $field_item['safe_value'];
+			$field_value = $field_item[$value_to_get];
 			$fields_output = $fields_output.'<'.$field_name.'>'.$field_value.'</'.$field_name.'>';
 		}
 	}
