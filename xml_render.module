@@ -101,15 +101,17 @@ function node_xml($node) {
 			if(isset($unidad_fc->field_unidad_titulo))$unidad_titulo = '<unidad_titulo>'.$unidad_fc->field_unidad_titulo['und'][0]['safe_value'].'</unidad_titulo>';
 			/////////////////////////// 
 
+			///UNIDAD OBJETIVOS////////
+			$unidad_objetivos = '';
+			if(isset($unidad_fc->field_unidad_objetivos))$unidad_objetivos = '<unidad_objetivos>'.$unidad_fc->field_unidad_objetivos['und'][0]['safe_value'].'</unidad_objetivos>';
+			///////////////////////////
+			
 			///UNIDAD INTRODUCCION/////
 			$unidad_introduccion = '';
 			if(isset($unidad_fc->field_unidad_introduccion))$unidad_introduccion = '<unidad_introduccion>'.$unidad_fc->field_unidad_introduccion['und'][0]['safe_value'].'</unidad_introduccion>';
 			/////////////////////////// 
 
-			///UNIDAD OBJETIVOS////////
-			$unidad_objetivos = '';
-			if(isset($unidad_fc->field_unidad_objetivos))$unidad_objetivos = '<unidad_objetivos>'.$unidad_fc->field_unidad_objetivos['und'][0]['safe_value'].'</unidad_objetivos>';
-			///////////////////////////
+			
 			
 			////RECURSOS////////////////////////////
 			$unidad_recursos = $unidad_fc->field_recurso['und'];
