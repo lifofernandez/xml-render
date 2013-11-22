@@ -16,12 +16,14 @@ function xml_render_menu() {
     'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
     //'file' => 'node.pages.inc',
   );
+
+
   return $items;
 }
 
 ///create XML tab only for specific custom content type
 function carpeta_access_callback($node) {
-  return $node->type == 'carpeta' ;
+  if( ( $node->type == 'carpeta') && user_access('download xml') )return TRUE;
 }
 
 ///collect field and field collection values
@@ -298,6 +300,18 @@ function xml_render_help($path, $arg) {
       break;
   }
 } 
+
+/**
+ * Implements hook_perm().
+ */
+function xml_render_permission() {
+  return array(
+    'download xml' => array(
+      'title' => t('Descargar XML'),
+      'description' => t('Allow an user to download XML from de node'),
+    ),
+  );
+}
 
 //////FUNCIONE PARA EXTRAER FIELDS
 
