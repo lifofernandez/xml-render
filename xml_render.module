@@ -1,6 +1,5 @@
 <?php 
 //setlocale(LC_ALL,"es_ES");
-
 /**
  * Implements hook_menu() for node carpeta.
  */
@@ -17,11 +16,40 @@ function xml_render_menu() {
     //'file' => 'node.pages.inc',
   );
 
-
   return $items;
 }
+/**
+ * Implements hook_help.
+ *
+ * Displays help and module information.
+ *
+ * @param path
+ *   Which path of the site we're using to display help
+ * @param arg
+ *   Array that holds the current path as returned from arg() function
+ */
+function xml_render_help($path, $arg) {
+  switch ($path) {
+    case "admin/help#xml_render":
+      return '<p>' . t("en la vista de la CARPETA simplemente clickear la pestaña 'Generar XML' para descargar el .xml ") . '</p>';
+      break;
+  }
+} 
 
-///create XML tab only for specific custom content type
+/**
+ * Implements hook_perm().
+ */
+function xml_render_permission() {
+  return array(
+    'download xml' => array(
+      'title' => t('Descargar XML'),
+      'description' => t('Allow an user to download XML from de node'),
+    ),
+  );
+}
+
+
+///create XML tab access only for specific custom content type and user
 function carpeta_access_callback($node) {
   if( ( $node->type == 'carpeta') && user_access('download xml') )return TRUE;
 }
@@ -39,7 +67,15 @@ function node_xml($node) {
 	$wrapper = entity_metadata_wrapper('node', $node);
 
 	//AUTOR////////////////////////////
+
+	$autor = xml_render_get_fields_collection($node, 'field_autor');
+	$output = $output.$autor;
+	
+	/*
 	$autor_items = field_get_items('node', $node, 'field_autor');
+
+	//return print_r($autor_items);
+	
 	$autor = '';
 	if(isset($autor_items)){
 		foreach ($autor_items as $autor_item) {
@@ -60,35 +96,38 @@ function node_xml($node) {
 		}
 		$output = $output.$autor;
 	}
+	*/
+
 	//termina autor///////////////////////
 
 	//INDTRODUCCION///////////////////////
-	$introduccion = get_field_regular($node, 'field_introduccion','safe_value');
+	$introduccion = xml_render_get_fields($node, 'field_introduccion');
 	$output = $output.$introduccion;
 	//////////////////////////////////////
 
 	//PROBLEMATICA_DEL_CAMPO//////////////
-	$problematica = get_field_regular($node, 'field_problematica_del_campo','safe_value');
+	$problematica = xml_render_get_fields($node, 'field_problematica_del_campo');
 	$output = $output.$problematica;
 	//////////////////////////////////////
 
 	//FIELD_REFLEXIONES//////////////////
-	$reflexiones = get_field_regular($node, 'field_reflexiones','safe_value');
+	$reflexiones = xml_render_get_fields($node, 'field_reflexiones');
 	$output = $output.$reflexiones;
 	/////////////////////////////////////
 
 	//FIELD_MAPA_CONCEPTUAL//////////////
-	$mapa = get_field_regular($node, 'field_mapa_conceptual','uri');
+	$mapa = xml_render_get_fields($node, 'field_mapa_conceptual','uri');
 	$output = $output.$mapa;
 	////////////////////////////////////
 
 	//FIELD_OBJETIVOS_DEL_CURSO//////////////
-	$objetivos = get_field_regular($node, 'field_objetivos_del_curso','safe_value');
+	$objetivos = xml_render_get_fields($node, 'field_objetivos_del_curso');
 	$output = $output.$objetivos;
 	////////////////////////////////////////
 
 	//UNIDADES////////////////////////////////
 	$unidad_items = field_get_items('node', $node, 'field_unidad');
+	//return print_r(xml_render_get_fields_collection($node, 'field_unidad'));
 
 	$unidades = '';
 	if(isset($unidad_items)){
@@ -187,8 +226,7 @@ function node_xml($node) {
 									$sub_apartado_recurso_fc = field_collection_field_get_entity($sub_apartado_recurso);
 									$tipo_recurso = taxonomy_term_load($sub_apartado_recurso_fc->field_recurso_tipo['und'][0]['tid']);
 									$tipo_name = $tipo_recurso->name;
-									$tipo_name = strtolower($tipo_name);
-									$tipo_name = str_replace(' ', '_', $tipo_name);
+									
 									$tipo_name = normalizeChars($tipo_name);
 
 									$recurso = '<recurso_'.$tipo_name.'>'.$sub_apartado_recurso_fc->field_recurso_contenido['und'][0]['safe_value'].'</recurso_'.$tipo_name.'>';
@@ -259,66 +297,40 @@ function saveXML($titulo,$contenido) {
 }
 
 function normalizeChars($s) {
- $replace = array(
-  'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'Ae', 'Å'=>'A', 'Æ'=>'A', 'Ă'=>'A',
-  'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'ae', 'å'=>'a', 'ă'=>'a', 'æ'=>'ae',
-  'þ'=>'b', 'Þ'=>'B',
-  'Ç'=>'C', 'ç'=>'c',
-  'È'=>'E', 'É'=>'E', 'Ê'=>'E', 'Ë'=>'E',
-  'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 
-  'Ğ'=>'G', 'ğ'=>'g',
-  'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'İ'=>'I', 'ı'=>'i', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i',
-  'Ñ'=>'N',
-  'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'Oe', 'Ø'=>'O', 'ö'=>'oe', 'ø'=>'o',
-  'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
-  'Š'=>'S', 'š'=>'s', 'Ş'=>'S', 'ș'=>'s', 'Ș'=>'S', 'ş'=>'s', 'ß'=>'ss',
-  'ț'=>'t', 'Ț'=>'T',
-  'Ù'=>'U', 'Ú'=>'U', 'Û'=>'U', 'Ü'=>'Ue',
-  'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ü'=>'ue', 
-  'Ý'=>'Y',
-  'ý'=>'y', 'ý'=>'y', 'ÿ'=>'y',
-  'Ž'=>'Z', 'ž'=>'z'
- );
- return strtr($s, $replace);
+	$replace = array(
+		'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'Ae', 'Å'=>'A', 'Æ'=>'A', 'Ă'=>'A',
+		'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'ae', 'å'=>'a', 'ă'=>'a', 'æ'=>'ae',
+		'þ'=>'b', 'Þ'=>'B',
+		'Ç'=>'C', 'ç'=>'c',
+		'È'=>'E', 'É'=>'E', 'Ê'=>'E', 'Ë'=>'E',
+		'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 
+		'Ğ'=>'G', 'ğ'=>'g',
+		'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'İ'=>'I', 'ı'=>'i', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i',
+		'Ñ'=>'N',
+		'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'Oe', 'Ø'=>'O', 'ö'=>'oe', 'ø'=>'o',
+		'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+		'Š'=>'S', 'š'=>'s', 'Ş'=>'S', 'ș'=>'s', 'Ș'=>'S', 'ş'=>'s', 'ß'=>'ss',
+		'ț'=>'t', 'Ț'=>'T',
+		'Ù'=>'U', 'Ú'=>'U', 'Û'=>'U', 'Ü'=>'Ue',
+		'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ü'=>'ue', 
+		'Ý'=>'Y',
+		'ý'=>'y', 'ý'=>'y', 'ÿ'=>'y',
+		'Ž'=>'Z', 'ž'=>'z'
+	);
+
+	$s = strtolower($s);
+	$s = str_replace(' ', '_', $s);	
+ 	return strtr($s, $replace);
 }
 
 
-/**
- * Implements hook_help.
- *
- * Displays help and module information.
- *
- * @param path
- *   Which path of the site we're using to display help
- * @param arg
- *   Array that holds the current path as returned from arg() function
- */
-function xml_render_help($path, $arg) {
-  switch ($path) {
-    case "admin/help#xml_render":
-      return '<p>' . t("en la vista de la CARPETA simplemente clickear la pestaña 'Generar XML' para descargar el .xml ") . '</p>';
-      break;
-  }
-} 
 
-/**
- * Implements hook_perm().
- */
-function xml_render_permission() {
-  return array(
-    'download xml' => array(
-      'title' => t('Descargar XML'),
-      'description' => t('Allow an user to download XML from de node'),
-    ),
-  );
-}
+//////FUNCION PARA EXTRAER FIELDS
 
-//////FUNCIONE PARA EXTRAER FIELDS
-
-///fields comunes (no coleccion de fields)
+///fields regulares (no coleccion de fields)
 /// 1st param = node element, 2nd param = field name;  3nd param = tipe of value;
 
-function get_field_regular($node, $field, $value_to_get){
+function xml_render_get_fields($node, $field, $value_to_get = 'safe_value'){
 
 	$field_items = field_get_items('node', $node, $field);
 	$field_name = str_replace('field_', '', $field);
@@ -331,6 +343,59 @@ function get_field_regular($node, $field, $value_to_get){
 			$fields_output = $fields_output.'<'.$field_name.'>'.$field_value.'</'.$field_name.'>';
 		}
 	}
+
+	return $fields_output;
+
+}
+
+
+///fields collections (no coleccion de fields)
+/// 1st param = node element, 2nd param = field name;  3nd param = tipe of value;
+
+function xml_render_get_fields_collection($node, $field){
+	
+	$fc_fields = field_get_items('node', $node, $field);
+
+	$collection_name = str_replace('field_', '', $field);
+
+	$fields_output = '';
+
+	$ids = array();
+	foreach ($fc_fields as $fc_field) {
+   		$ids[] = $fc_field['value'];
+	}
+
+	$collections = field_collection_item_load_multiple($ids);
+
+	//Loop over the array - if you have more than one entity
+	foreach($collections as $col_key => $collection) {
+	    //$collection = $collections[$i];
+		$this_collection = '<'.$collection_name.'>';
+
+	    //Iterate over all member vars of the FieldCollectionItemEntity object
+	    foreach($collection as $key => $item){
+	    	$this_item = '';
+
+	        //Look for fields - there are some other class vars, too.
+	        if (strpos ($key, 'field') !== false){
+
+	            $this_name = $collection_name.'_'.str_replace('field_', '', $key);
+
+	           	//Search for textfields 
+	            if (isset($item['und'][0]['safe_value'])){
+	              
+	                $this_item = "<".$this_name.">".$item['und'][0]['safe_value']."</".$this_name.">";
+	            	
+	            }
+	        }
+
+	        $this_collection  = $this_collection.$this_item; 
+	    }
+
+	    $fields_output = $fields_output.$this_collection.'</'.$collection_name.'>';                    
+	} 
+
+
 
 	return $fields_output;
 
