@@ -164,8 +164,7 @@ function node_xml($node) {
 
 					$tipo_recurso = taxonomy_term_load($recurso_fc->field_recurso_tipo['und'][0]['tid']);
 					$tipo_name = $tipo_recurso->name;
-					$tipo_name = strtolower($tipo_name);
-					$tipo_name = str_replace(' ', '_', $tipo_name);
+				
 					$tipo_name = normalizeChars($tipo_name);
 					
 					$recurso = '<recurso_'.$tipo_name.'>'.$recurso_fc->field_recurso_contenido['und'][0]['safe_value'].'</recurso_'.$tipo_name.'>';
@@ -195,8 +194,7 @@ function node_xml($node) {
 							//return print_r($recurso_fc->field_tipo_de_recurso);
 							$tipo_recurso = taxonomy_term_load($apartado_recurso_fc->field_recurso_tipo['und'][0]['tid']);
 							$tipo_name = $tipo_recurso->name;
-							$tipo_name = strtolower($tipo_name);
-							$tipo_name = str_replace(' ', '_', $tipo_name);
+							
 							$tipo_name = normalizeChars($tipo_name);
 
 							//$recurso_tipo = '<field_tipo_de_recurso>'.$tax_name.'</field_tipo_de_recurso>';
@@ -280,8 +278,6 @@ function node_xml($node) {
 }
 
 function saveXML($titulo,$contenido) {
-	$titulo = strtolower($titulo);
-	$titulo = str_replace(' ', '_', $titulo);
 	$titulo = normalizeChars($titulo);
 	$filename = $titulo.".xml";
 	ob_start();
