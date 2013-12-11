@@ -50,9 +50,10 @@ function xml_render_help($path, $arg) {
   }
 } 
 
-/**
+/*
  * Implements hook_perm().
  */
+ 
 function xml_render_permission() {
   return array(
     'download xml' => array(
