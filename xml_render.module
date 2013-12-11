@@ -1,15 +1,21 @@
 <?php 
 
 /*
-*DEV brach
+
+DEV brach
+
 */
 
 
 //setlocale(LC_ALL,"es_ES");
 
 /*
-* Implements hook_menu() for node carpeta.
+
+Implements hook_menu() for node carpeta.
+
 */
+
+
  
 function xml_render_menu() {
   $items['node/%node/xml'] = array(
@@ -26,7 +32,7 @@ function xml_render_menu() {
 
   return $items;
 }
-/**
+/*
  * Implements hook_help.
  *
  * Displays help and module information.
