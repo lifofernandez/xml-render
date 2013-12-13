@@ -64,7 +64,7 @@ function carpeta_access_callback($node) {
 
 ///collect field and field collection values
 function node_xml($node) {
-	$output = '<carpeta>';
+	$output = '<!DOCTYPE carpeta SYSTEM "https://gist.github.com/lifofernandez/7937570/raw/7724e477ec7a34ea36672c7dc991dd149fd39e0f/mdm_definicion.dtd"><carpeta>';
  	// return t('Hello node with id !nid', array('!nid' => $node->nid));
 
 	if(isset($node->title)){
@@ -271,6 +271,17 @@ function node_xml($node) {
 	///FINAL
 	///sum all fields
 	$output = $output.'</carpeta>';
+
+	//ToDo add DTD reference
+	/* http://www.php.net/manual/en/libxml.constants.php
+
+
+
+	$doctype = DOMImplementation::createDocumentType("html", 
+                "-//W3C//DTD HTML 4.01//EN", 
+                "http://www.w3.org/TR/html4/strict.dtd"); 
+	$dom = DOMImplementation::createDocument(null, 'html', $doctype); 
+	*/
 
 	//build XML DOM
 	$dom = new DOMDocument;
