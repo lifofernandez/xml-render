@@ -161,8 +161,9 @@ function node_xml($node) {
 							if(!empty($apartado_bloque_fc->field_bloque_contenido['und'][0]['safe_value'])){
 								
 								$tipo_name = 'No especificado';
-								if(!empty(taxonomy_term_load($apartado_bloque_fc->field_bloque_tipo['und'][0]['tid']))){
-									$tipo_bloque = taxonomy_term_load($apartado_bloque_fc->field_bloque_tipo['und'][0]['tid']);
+								$tipo_bloque_id = $apartado_bloque_fc->field_bloque_tipo['und'][0]['tid'];
+								if(!empty($tipo_bloque_id)){
+									$tipo_bloque = taxonomy_term_load($tipo_bloque_id);
 									$tipo_name = $tipo_bloque->name;
 								}
 								$tipo_name = normalizeChars($tipo_name);
@@ -197,9 +198,9 @@ function node_xml($node) {
 									if(!empty($sub_apartado_bloque_fc->field_bloque_contenido['und'][0]['safe_value'])){
 										
 										$tipo_name = 'No especificado';
-										if(!empty(taxonomy_term_load($sub_apartado_bloque_fc->field_bloque_tipo['und'][0]['tid']))){
-											$tipo_bloque = taxonomy_term_load($sub_apartado_bloque_fc->field_bloque_tipo['und'][0]['tid']);
-
+										$tipo_bloque_id = $apartado_bloque_fc->field_bloque_tipo['und'][0]['tid'];
+										if(!empty($tipo_bloque_id)){
+											$tipo_bloque = taxonomy_term_load($tipo_bloque_id);
 											$tipo_name = $tipo_bloque->name;
 										}
 										$tipo_name = normalizeChars($tipo_name);
