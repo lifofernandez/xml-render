@@ -1,0 +1,417 @@
+<?php 
+//setlocale(LC_ALL,"es_ES");
+
+/*
+
+	master: 18 sep 2014
+
+*/
+
+/**
+ * Implements hook_menu() for node carpeta.
+ */
+
+function xml_render_menu() {
+
+
+	$items['node/%node/xml'] = array(
+	    'title' => 'Generar ZIP (.xml + imgs)',
+	    'page callback' => 'node_xml',
+	    'page arguments' => array(1),
+	    'access callback' => 'carpeta_access_callback',
+	    'access arguments' => array(1), 
+	    'weight' => 0,
+	    'type' => MENU_LOCAL_TASK,
+	    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+	    //'file' => 'node.pages.inc',
+	);
+  
+  	return $items;
+
+}
+
+///create XML tab only for specific custom content type
+function carpeta_access_callback($node) {
+  if( ( $node->type == 'carpeta') && user_access('download xml') )return TRUE;
+}
+
+
+
+///Import JS addones
+//drupal_add_js(drupal_get_path('module', 'xml_render') .'/js/jszip.js');
+//drupal_add_js(drupal_get_path('module', 'xml_render') .'/js/jszip-utils.js');
+//drupal_add_js(drupal_get_path('module', 'xml_render') .'/js/jszip-utils-ie.js');
+
+//drupal_add_js(drupal_get_path('module', 'xml_render') .'/js/FileSaver.js');
+
+
+//$node = menu_get_object();  // Get the node
+//node_xml($node);
+
+
+
+///collect field and field collection values
+function node_xml($node) {
+
+	$output = '<carpeta>';
+	 // return t('Hello node with id !nid', array('!nid' => $node->nid));
+
+	if(isset($node->title)){
+		$titulo_de_la_carpeta = $node->title;
+		$output = $output.'<carpeta_titulo class="item" subclass="carpeta_item">'.$titulo_de_la_carpeta.'</carpeta_titulo>';
+	}
+
+	$wrapper = entity_metadata_wrapper('node', $node);
+
+	//AUTOR////////////////////////////
+	$autor_items = field_get_items('node', $node, 'field_autor');
+	$autor = '';
+	if(!empty($autor_items)){
+		foreach ($autor_items as $autor_item) {
+			$fc_autor = field_collection_field_get_entity($autor_item);
+			//$fc_name = $fc->field_name;
+
+			///AUTOR NOMBRE///////
+			$autor_nombre = '';
+			if(isset($fc_autor->field_autor_nombre))$autor_nombre = '<autor_nombre class="item" subclass="autor_item">'.$fc_autor->field_autor_nombre['und'][0]['safe_value'].'</autor_nombre>';
+			//////////////////////////////////
+
+			///AUTOR BIO///////
+			$autor_bio = '';
+			if(isset($fc_autor->field_autor_biografia))$autor_bio = '<autor_biografia class="item" subclass="autor_item">'.$fc_autor->field_autor_biografia['und'][0]['safe_value'].'</autor_biografia>';
+			//////////////////////
+			
+			$autor ='<autor class="group" subclass="autor_group">'.$autor_nombre.$autor_bio.'</autor>';
+		}
+		$output = $output.$autor;
+	}
+	//termina autor///////////////////////
+
+	//INDTRODUCCION///////////////////////
+	$introduccion = get_field_regular($node, 'field_introduccion','safe_value');
+	$output = $output.$introduccion;
+	//////////////////////////////////////
+
+	//PROBLEMATICA_DEL_CAMPO//////////////
+	$problematica = get_field_regular($node, 'field_problematica_del_campo','safe_value');
+	$output = $output.$problematica;
+	//////////////////////////////////////
+
+	//FIELD_REFLEXIONES//////////////////
+	$reflexiones = get_field_regular($node, 'field_reflexiones','safe_value');
+	$output = $output.$reflexiones;
+	/////////////////////////////////////
+
+	//FIELD_MAPA_CONCEPTUAL//////////////
+	$mapa = get_field_regular($node, 'field_mapa_conceptual','uri');
+	$output = $output.$mapa;
+	////////////////////////////////////
+
+	//FIELD_OBJETIVOS_DEL_CURSO//////////////
+	$objetivos = get_field_regular($node, 'field_objetivos_del_curso','safe_value');
+	$output = $output.$objetivos;
+	////////////////////////////////////////
+
+	//UNIDADES////////////////////////////////
+	$unidad_items = field_get_items('node', $node, 'field_unidad');
+
+	$unidades = '';
+	if(!empty($unidad_items)){
+		foreach ($unidad_items as $n_item => $unidad_item) {
+			$unidad_fc = field_collection_field_get_entity($unidad_item);
+			//return print_r($unidad_fc);
+			//return print_r($fc);
+			//$fc_name = $unidad_fc->field_name;
+			
+			///UNIDAD TITULO///////////
+			$unidad_titulo = '';
+			if(!empty($unidad_fc->field_unidad_titulo))$unidad_titulo = '<unidad_titulo class="item" subclass="unidad_item">'.$unidad_fc->field_unidad_titulo['und'][0]['safe_value'].'</unidad_titulo>';
+			/////////////////////////// 
+
+			///UNIDAD OBJETIVOS////////
+			$unidad_objetivos = '';
+			if(!empty($unidad_fc->field_unidad_objetivos))$unidad_objetivos = '<unidad_objetivos class="item" subclass="unidad_item">'.$unidad_fc->field_unidad_objetivos['und'][0]['safe_value'].'</unidad_objetivos>';
+			///////////////////////////
+			
+			///UNIDAD INTRODUCCION/////
+			$unidad_introduccion = '';
+			if(!empty($unidad_fc->field_unidad_introduccion))$unidad_introduccion = '<unidad_introduccion class="item" subclass="unidad_item">'.$unidad_fc->field_unidad_introduccion['und'][0]['safe_value'].'</unidad_introduccion>';
+			/////////////////////////// 
+
+			
+		
+			
+			///APARTADOS//////////////////////////////
+			$unidad_apartados = $unidad_fc->field_apartado['und'];
+			$apartados = '';
+			if(!empty($unidad_apartados)){
+				foreach ($unidad_apartados as $n_item => $unidad_apartado) {
+					$apartado_fc = field_collection_field_get_entity($unidad_apartado);
+					//$apartado_fc_name = $apartado_fc->field_name;
+					$apartado_titulo = '';
+					if(!empty($apartado_fc->field_apartado_titulo))$apartado_titulo = '<apartado_titulo class="item" subclass="apartado_item">'.$apartado_fc->field_apartado_titulo['und'][0]['safe_value'].'</apartado_titulo>';
+
+					///APARTADOS RECURSOS/////////////////////////
+					$apartado_bloques = $apartado_fc->field_bloque['und'];
+					$bloques = '';
+					if(!empty($apartado_bloques)){
+						foreach ($apartado_bloques as $n_item => $apartado_bloque) {
+							$apartado_bloque_fc = field_collection_field_get_entity($apartado_bloque);
+							
+							if(!empty($apartado_bloque_fc->field_bloque_contenido['und'][0]['safe_value'])){
+								
+								$tipo_name = 'No especificado';
+								if(!empty(taxonomy_term_load($apartado_bloque_fc->field_bloque_tipo['und'][0]['tid']))){
+									$tipo_bloque = taxonomy_term_load($apartado_bloque_fc->field_bloque_tipo['und'][0]['tid']);
+									$tipo_name = $tipo_bloque->name;
+								}
+								$tipo_name = normalizeChars($tipo_name);
+
+								$bloque = '<bloque tipo="'.$tipo_name.'" class="item" subclass="apartado_item">'.html_entity_decode($apartado_bloque_fc->field_bloque_contenido['und'][0]['safe_value']).'</bloque>';
+
+								$bloques = $bloques.$bloque;
+							}
+
+						}
+					}
+					//termina apartado recursos/////////////////////
+
+					///SUB_APARTADOS////////////////////////////////
+					$unidad_sub_apartados = $apartado_fc->field_subapartado['und'];
+					$sub_apartados = '';
+					if(!empty($unidad_sub_apartados)){
+						foreach ($unidad_sub_apartados as $n_item => $unidad_sub_apartado) {
+							$sub_apartado_fc = field_collection_field_get_entity($unidad_sub_apartado);
+							
+							$sub_apartado_titulo = '';
+							if(!empty($sub_apartado_fc->field_subapartado_titulo))$sub_apartado_titulo = '<subapartado_titulo class="item" subclass="subapartado_item">'.$sub_apartado_fc->field_subapartado_titulo['und'][0]['safe_value'].'</subapartado_titulo>';
+							//return var_dump($sub_apartado_titulo);
+
+							///SUB_APARTADOS bloqueS//////////////////////
+							$sub_apartado_bloques = $sub_apartado_fc->field_bloque['und'];
+							$sub_bloques = '';
+							if(!empty($sub_apartado_bloques)){
+								foreach ($sub_apartado_bloques as $n_item => $sub_apartado_bloque) {
+									$sub_apartado_bloque_fc = field_collection_field_get_entity($sub_apartado_bloque);
+									
+									if(!empty($sub_apartado_bloque_fc->field_bloque_contenido['und'][0]['safe_value'])){
+										
+										$tipo_name = 'No especificado';
+										if(!empty(taxonomy_term_load($sub_apartado_bloque_fc->field_bloque_tipo['und'][0]['tid']))){
+											$tipo_bloque = taxonomy_term_load($sub_apartado_bloque_fc->field_bloque_tipo['und'][0]['tid']);
+
+											$tipo_name = $tipo_bloque->name;
+										}
+										$tipo_name = normalizeChars($tipo_name);
+
+										$sub_bloque = '<bloque tipo="'.$tipo_name.'" class="item" subclass="subapartado_item">'.html_entity_decode($sub_apartado_bloque_fc->field_bloque_contenido['und'][0]['safe_value']).'</bloque>';
+										$sub_bloques = $sub_bloques.$sub_bloque;
+									}
+								}
+							}
+							//termina sub apartado sub_apartado (concatenar todos los strings)///////////////////
+							$sub_apartados = $sub_apartados.'<sub_apartado class="group" subclass="subapartado_group">'.$sub_apartado_titulo.$sub_bloques.'</sub_apartado>';
+					
+						}
+					}
+					//termina apartados////////////////////////////
+					$apartados = $apartados.'<apartado class="group" subclass="apartado_group">'.$apartado_titulo.$bloques.$sub_apartados.'</apartado>';
+				
+				}
+			}
+			//termina apartados////////////////////////////
+
+
+			///REFERENCIAS BIBLIOGRAFICAS///////
+			$unidad_bibliografia = '';
+			if(!empty($unidad_fc->field_unidad_bibliografia))$unidad_bibliografia = '<unidad_bibliografia class="item" subclass="unidad_item">'.$unidad_fc->field_unidad_bibliografia['und'][0]['safe_value'].'</unidad_bibliografia>';
+			///////////////////////////////////
+
+
+			$unidades = $unidades.'<unidad class="group" subclass="unidad_group">'.$unidad_titulo.$unidad_introduccion.$unidad_objetivos.$apartados.$unidad_bibliografia.'</unidad>';
+
+		}
+		$output = $output.$unidades;
+	}
+	//termina unidades////////////////////////////
+
+
+	$author_name = ($node->name);
+
+
+	///FINAL
+	///cocat all fields
+	$output = $output.'</carpeta>';
+
+	//debug string, util cuando no hay contenido para generar el render .xml
+	//$output = '<note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body><img src="http://localhost/drupal/themes/bartik/logo.png" alt="Smiley face" width="42" height="42"><br><img src="http://localhost/drupal/themes/bartik/logo.png" alt="Smiley face" width="42" height="42">'.html_entity_decode('<p>está</p><p>&nbsp;</p>').'</body></note>';
+
+	$output = preg_replace('/<img([^>]*)>/i' , "<img $1 />", $output);
+	$output = str_replace("<br>" , "<br/>", $output);
+	
+
+
+	//build XML DOM
+	$dom = new DOMDocument;
+	$dom->preserveWhiteSpace = FALSE;
+	$dom->recover = TRUE;
+	$dom->loadXML($output);
+	$dom->formatOutput = TRUE;
+
+	$imgs = $dom->getElementsByTagName('img');
+	
+	//$content_images = array();
+
+	foreach($imgs as $img){
+		$img_original_src = $img->getAttribute('src'); // will give you the src String
+		
+		$filename = basename($img_original_src);         // $file is set to "index.php"
+		
+		$img->setAttribute('href','file:///images/'.$filename); // change your src= value
+		//$img->setAttribute('original_src',$img_original_src); // change your src= value
+
+	//	array_push($content_images, $img_original_src);
+	}
+
+
+
+	$XML_output = $dom->saveXml();
+
+
+	//$module_vars = array('nodeTitle' => normalizeChars($titulo_de_la_carpeta), 'nodeRenderXml' => $XML_output, 'nodeImgs' => $content_images); // and so on
+	//drupal_add_js(array('xml_render' => $module_vars), 'setting'); 
+
+	//drupal_add_js(drupal_get_path('module', 'xml_render') .'/js/xml_render.js');
+
+	$autor_folder = 'sites/default/files/autores/'.$author_name.'/';
+
+	global $base_url;
+
+	if (!file_exists('sites/default/files/xml_renders')) {
+    	mkdir('sites/default/files/xml_renders', 0777, true);
+	}
+	// create object
+	$zip = new ZipArchive();
+
+	// open archive 
+	if ($zip->open('sites/default/files/xml_renders/DMD_carpeta-'.normalizeChars($titulo_de_la_carpeta).'.zip', ZIPARCHIVE::OVERWRITE) !== TRUE) {
+	    die ("Could not open archive");
+	}
+
+	$zip->addFromString(normalizeChars($titulo_de_la_carpeta.'_x_'.$author_name).'-'.time().'.xml', $XML_output);
+	// list of files to add
+	//$fileList = scandir($autor_folder);
+	$fileList = array_diff(scandir($autor_folder), array('..', '.'));
+
+	//var_dump($fileList);
+
+	// add files
+	foreach ($fileList as $f) {
+	    $zip->addFile($autor_folder.$f, 'images/'.$f) or die ("ERROR: Could not add file: $f");   
+	}
+	    
+	// close and save archive
+	$zip->close();
+	//echo 'Archive created successfully.';   
+
+
+
+
+
+	return '<div class="alert alert-success" role="alert">Archivo generado satisfactoriamente!</div>
+	<a class="btn btn-info" href="'.$base_url.'/sites/default/files/xml_renders/DMD_carpeta-'.normalizeChars($titulo_de_la_carpeta).'.zip">Descargar ZIP</a><pre id="xml-preview" style="margin-top:10px;">'.htmlspecialchars($XML_output).'</pre>';
+
+
+}
+
+function normalizeChars($s) {
+	$s = strtolower($s);
+
+	$replace = array(
+	  'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'Ae', 'Å'=>'A', 'Æ'=>'A', 'Ă'=>'A',
+	  'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'ae', 'å'=>'a', 'ă'=>'a', 'æ'=>'ae',
+	  'þ'=>'b', 'Þ'=>'B',
+	  'Ç'=>'C', 'ç'=>'c',
+	  'È'=>'E', 'É'=>'E', 'Ê'=>'E', 'Ë'=>'E',
+	  'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 
+	  'Ğ'=>'G', 'ğ'=>'g',
+	  'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'İ'=>'I', 'ı'=>'i', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i',
+	  'Ñ'=>'N',
+	  'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'Oe', 'Ø'=>'O', 'ö'=>'oe', 'ø'=>'o',
+	  'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+	  'Š'=>'S', 'š'=>'s', 'Ş'=>'S', 'ș'=>'s', 'Ș'=>'S', 'ş'=>'s', 'ß'=>'ss',
+	  'ț'=>'t', 'Ț'=>'T',
+	  'Ù'=>'U', 'Ú'=>'U', 'Û'=>'U', 'Ü'=>'Ue',
+	  'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ü'=>'ue', 
+	  'Ý'=>'Y',
+	  'ý'=>'y', 'ý'=>'y', 'ÿ'=>'y',
+	  'Ž'=>'Z', 'ž'=>'z',
+	  
+	  ' '=>'_', ':'=>''
+	 );
+	 return strtr($s, $replace);
+}
+
+
+/**
+ * Implements hook_help.
+ *
+ * Displays help and module information.
+ *
+ * @param path
+ *   Which path of the site we're using to display help
+ * @param arg
+ *   Array that holds the current path as returned from arg() function
+ */
+function xml_render_help($path, $arg) {
+  switch ($path) {
+    case "admin/help#xml_render":
+      return '<p>' . t("en la vista de la CARPETA simplemente clickear la pestaña 'Generar XML' para descargar el .xml ") . '</p>';
+      break;
+  }
+} 
+
+/**
+ * Implements hook_perm().
+ */
+function xml_render_permission() {
+  return array(
+    'download xml' => array(
+      'title' => t('Descargar XML'),
+      'description' => t('Allow an user to download XML from de node'),
+    ),
+  );
+}
+
+
+
+//////FUNCIONE PARA EXTRAERE le FIELDS bambino
+
+///fields comunes (no coleccion de fields)
+/// 1st param = node element, 2nd param = field name;  3nd param = tipe of value;
+
+function get_field_regular($node, $field, $value_to_get = 'safe_value'){
+
+	$field_items = field_get_items('node', $node, $field);
+	$field_name = str_replace('field_', '', $field);
+	
+
+	$fields_output = '';
+
+	if(isset($field_items) && !empty($field_items)){
+		foreach ($field_items as $n_item => $field_item) {
+			
+			if($value_to_get != 'uri'){
+				$field_value = $field_item[$value_to_get];
+				$fields_output = $fields_output.'<'.$field_name.' class="item" subclass="carpeta_item">'.html_entity_decode($field_value).'</'.$field_name.'>';
+			}
+			if($value_to_get == 'uri'){
+				$field_value =	file_create_url($field_item[$value_to_get]);
+				$fields_output = $fields_output.'<'.$field_name.' class="item" subclass="carpeta_item"><Image href="file:'.$field_value.'"></Image></'.$field_name.'>';
+			}
+		}
+	}
+
+	return $fields_output;
+
+}
