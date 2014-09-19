@@ -5,14 +5,7 @@
  * By Lisandro Fernandez
  * 
  */
-
-
-CKEDITOR.editorConfig = function(config) {
-    config.entities = false;
-    config.htmlEncodeOutput = false;
-}
- /*
-
+/*
 var carpeta_titulo;
 var carpeta_xml;
 var carpeta_imgs;
@@ -130,8 +123,8 @@ Drupal.behaviors.xml_render = {
 	}
 
 }
-
 */
+
 
 
 	
