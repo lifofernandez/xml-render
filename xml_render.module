@@ -279,7 +279,6 @@ function node_xml($node) {
 
 	$preHtmlOutput = $output;
 
-
 	$dom = new DOMDocument;
 	$dom->preserveWhiteSpace = FALSE;
 	$dom->recover = TRUE;
@@ -446,3 +445,4 @@ function get_field_regular($node, $field, $value_to_get = 'safe_value'){
 	return $fields_output;
 
 }
+
