@@ -44,7 +44,7 @@ function carpeta_access_callback($node) {
 
 //drupal_add_js(drupal_get_path('module', 'xml_render') .'/js/FileSaver.js');
 
-drupal_add_js(drupal_get_path('module', 'xml_render') .'/js/xml_render.js');
+//drupal_add_js(drupal_get_path('module', 'xml_render') .'/js/xml_render.js');
 
 //$node = menu_get_object();  // Get the node
 //node_xml($node);
