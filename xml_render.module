@@ -268,7 +268,8 @@ function node_xml($node) {
 		
 		$filename = basename($img_original_src);         // $file is set to "index.php"
 		
-		$img->setAttribute('href','file:///images/'.$filename); // change your src= value
+		$img->setAttribute('src','files/'.$filename);
+		$img->setAttribute('href','file:///files/'.$filename); // change your src= value
 		//$img->setAttribute('original_src',$img_original_src); // change your src= value
 
 	//	array_push($content_images, $img_original_src);
@@ -278,7 +279,6 @@ function node_xml($node) {
 
 
 	$preHtmlOutput = $output;
-
 	$dom = new DOMDocument;
 	$dom->preserveWhiteSpace = FALSE;
 	$dom->recover = TRUE;
@@ -296,7 +296,8 @@ function node_xml($node) {
 		
 		$filename = basename($img_original_src);         // $file is set to "index.php"
 		
-		$img->setAttribute('href','file:///images/'.$filename); // change your src= value
+		$img->setAttribute('src','files/'.$filename);
+		$img->setAttribute('href','file:///files/'.$filename); // change your src= value
 		//$img->setAttribute('original_src',$img_original_src); // change your src= value
 
 	//	array_push($content_images, $img_original_src);
@@ -337,7 +338,7 @@ function node_xml($node) {
 
 	// add files
 	foreach ($fileList as $f) {
-	    $zip->addFile($autor_folder.$f, 'images/'.$f) or die ("ERROR: Could not add file: $f");   
+	    $zip->addFile($autor_folder.$f, 'files/'.$f) or die ("ERROR: Could not add file: $f");   
 	}
 	    
 	// close and save archive
@@ -445,4 +446,5 @@ function get_field_regular($node, $field, $value_to_get = 'safe_value'){
 	return $fields_output;
 
 }
+
 
