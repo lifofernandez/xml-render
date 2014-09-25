@@ -143,6 +143,7 @@ function node_xml($node) {
 		
 			
 			///APARTADOS//////////////////////////////
+			$unidad_apartados;
 			if(!empty($unidad_fc->field_apartado['und']))$unidad_apartados = $unidad_fc->field_apartado['und'];
 			$apartados = '';
 			if(!empty($unidad_apartados)){
@@ -152,7 +153,7 @@ function node_xml($node) {
 					$apartado_titulo = '';
 					if(!empty($apartado_fc->field_apartado_titulo))$apartado_titulo = '<apartado_titulo class="item" subclass="apartado_item">'.$apartado_fc->field_apartado_titulo['und'][0]['safe_value'].'</apartado_titulo>';
 
-					///APARTADOS RECURSOS/////////////////////////
+					///APARTADOS BLOUQUES/////////////////////////
 					if(!empty($apartado_fc->field_bloque['und']))$apartado_bloques = $apartado_fc->field_bloque['und'];
 					$bloques = '';
 					if(!empty($apartado_bloques)){
@@ -179,6 +180,7 @@ function node_xml($node) {
 					//termina apartado recursos/////////////////////
 
 					///SUB_APARTADOS////////////////////////////////
+					$unidad_sub_apartados;
 					if(!empty($apartado_fc->field_subapartado['und']))$unidad_sub_apartados = $apartado_fc->field_subapartado['und'];
 					$sub_apartados = '';
 					if(!empty($unidad_sub_apartados)){
@@ -190,7 +192,7 @@ function node_xml($node) {
 							//return var_dump($sub_apartado_titulo);
 
 							///SUB_APARTADOS bloqueS//////////////////////
-							$sub_apartado_bloques = $sub_apartado_fc->field_bloque['und'];
+							if(!empty($sub_apartado_fc->field_bloque['und']))$sub_apartado_bloques = $sub_apartado_fc->field_bloque['und'];
 							$sub_bloques = '';
 							if(!empty($sub_apartado_bloques)){
 								foreach ($sub_apartado_bloques as $n_item => $sub_apartado_bloque) {
