@@ -177,7 +177,7 @@ function node_xml($node) {
 			if(!empty($anexo_fc->field_apartado['und']))$anexo_apartados = $anexo_fc->field_apartado['und'];
 
 			$apartados = get_fieldcollection_apartado($anexo_apartados);
-			$unidades = $unidades.'<apartado class="group" subclass="apartado_group">'.$apartados.'</apartado>';
+			$anexos = $anexos.'<apartado class="group" subclass="apartado_group">'.$apartados.'</apartado>';
 		}
 
 	}///TERMINA ANEXOS
