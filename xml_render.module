@@ -395,6 +395,9 @@ function get_field_regular($node, $field, $value_to_get = 'safe_value'){
 
 function get_fieldcollection_apartado($apartados_in){
 	$apartados = '';
+	$unidad_sub_apartados;
+	$sub_apartados = '';
+
 	if(!empty($apartados_in)){
 		foreach ($apartados_in as $n_item => $unidad_apartado) {
 			$apartado_fc = field_collection_field_get_entity($unidad_apartado);
@@ -431,7 +434,6 @@ function get_fieldcollection_apartado($apartados_in){
 			///SUB_APARTADOS////////////////////////////////
 			$unidad_sub_apartados;
 			if(!empty($apartado_fc->field_subapartado['und']))$unidad_sub_apartados = $apartado_fc->field_subapartado['und'];
-			$sub_apartados = '';
 			if(!empty($unidad_sub_apartados)){
 				foreach ($unidad_sub_apartados as $n_item => $unidad_sub_apartado) {
 					$sub_apartado_fc = field_collection_field_get_entity($unidad_sub_apartado);
