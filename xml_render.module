@@ -420,14 +420,12 @@ function get_fieldcollection_apartado($apartados_in){
 			//termina apartado bloques/////////////////////
 
 			///SUB_APARTADOS////////////////////////////////
-			$unidad_sub_apartados;
-
-			$sub_apartados = '';
+			
+			$unidad_sub_apartados; //clean/reset obj
+			$sub_apartados = ''; //clean/reset string
 
 			if(!empty($apartado_fc->field_subapartado['und']))$unidad_sub_apartados = $apartado_fc->field_subapartado['und'];
 			if(!empty($unidad_sub_apartados)){
-				$sub_apartados = '';
-
 				foreach ($unidad_sub_apartados as $n_item => $unidad_sub_apartado) {
 					$sub_apartado_fc = field_collection_field_get_entity($unidad_sub_apartado);
 					
