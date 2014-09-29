@@ -145,7 +145,7 @@ function node_xml($node) {
 			///APARTADOS//////////////////////////////
 			$unidad_apartados;
 			if(!empty($unidad_fc->field_apartado['und']))$unidad_apartados = $unidad_fc->field_apartado['und'];
-
+			$apartados = '';
 			$apartados = get_fieldcollection_apartado($unidad_apartados);
 
 			///REFERENCIAS BIBLIOGRAFICAS///////
