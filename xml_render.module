@@ -383,7 +383,7 @@ function get_field_regular($node, $field, $value_to_get = 'safe_value'){
 
 function get_fieldcollection_apartado($apartados_in){
 	$apartados = '';
-	$unidad_sub_apartados;
+	//$unidad_sub_apartados;
 	//$sub_apartados = '';
 
 	if(!empty($apartados_in)){
@@ -423,8 +423,9 @@ function get_fieldcollection_apartado($apartados_in){
 			
 			$unidad_sub_apartados; //clean/reset obj
 			$sub_apartados = ''; //clean/reset string
-
+			
 			if(!empty($apartado_fc->field_subapartado['und']))$unidad_sub_apartados = $apartado_fc->field_subapartado['und'];
+			
 			if(!empty($unidad_sub_apartados)){
 				foreach ($unidad_sub_apartados as $n_item => $unidad_sub_apartado) {
 					$sub_apartado_fc = field_collection_field_get_entity($unidad_sub_apartado);
@@ -432,16 +433,16 @@ function get_fieldcollection_apartado($apartados_in){
 					$sub_apartado_titulo = '';
 					if(!empty($sub_apartado_fc->field_subapartado_titulo))$sub_apartado_titulo = '<subapartado_titulo class="item" subclass="subapartado_item">'.$sub_apartado_fc->field_subapartado_titulo['und'][0]['safe_value'].'</subapartado_titulo>';
 					//return var_dump($sub_apartado_titulo);
-
+					$sub_bloques = '';
+					$sub_apartado_bloques;
 					///SUB_APARTADOS bloqueS//////////////////////
 					if(!empty($sub_apartado_fc->field_bloque['und']))$sub_apartado_bloques = $sub_apartado_fc->field_bloque['und'];
-					$sub_bloques = '';
+					
 					if(!empty($sub_apartado_bloques)){
 						foreach ($sub_apartado_bloques as $n_item => $sub_apartado_bloque) {
 							$sub_apartado_bloque_fc = field_collection_field_get_entity($sub_apartado_bloque);
-							
 							if(!empty($sub_apartado_bloque_fc->field_bloque_contenido['und'][0]['safe_value'])){
-								
+								$sub_bloque = '';
 								$tipo_name = 'sin especificar';
 								if(!empty($sub_apartado_bloque_fc->field_bloque_tipo['und'][0]['tid'])){
 									$tipo_bloque_id = $sub_apartado_bloque_fc->field_bloque_tipo['und'][0]['tid'];
