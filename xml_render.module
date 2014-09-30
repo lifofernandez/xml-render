@@ -132,8 +132,8 @@ function node_xml($node) {
 			///APARTADOS//////////////////////////////
 			$unidad_apartados;
 			if(!empty($unidad_fc->field_apartado['und']))$unidad_apartados = $unidad_fc->field_apartado['und'];
-			$apartadosStr = '';
-			$apartadosStr = get_fieldcollection_apartado($unidad_apartados);
+			$apartados = '';
+			$apartados = get_fieldcollection_apartado($unidad_apartados);
 
 			///REFERENCIAS BIBLIOGRAFICAS///////
 			$unidad_bibliografia = '';
@@ -141,7 +141,7 @@ function node_xml($node) {
 			///////////////////////////////////
 
 
-			$unidades .= '<unidad class="group" subclass="unidad_group">'.$unidad_titulo.$unidad_introduccion.$unidad_objetivos.$apartadosStr.$unidad_bibliografia.'</unidad>';
+			$unidades .= '<unidad class="group" subclass="unidad_group">'.$unidad_titulo.$unidad_introduccion.$unidad_objetivos.$apartados.$unidad_bibliografia.'</unidad>';
 
 		}
 		$output .= $unidades;
@@ -162,7 +162,6 @@ function node_xml($node) {
 
 			$anexo_apartados;
 			if(!empty($anexo_fc->field_apartado['und']))$anexo_apartados = $anexo_fc->field_apartado['und'];
-
 			$apartados = get_fieldcollection_apartado($anexo_apartados);
 			
 			$anexos .= '<anexo class="group" subclass="anexo_group">'.$apartados.'</anexo>';
@@ -398,10 +397,9 @@ function get_fieldcollection_apartado($apartados_in){
 			$bloques = '';
 			if(!empty($apartado_bloques)){
 				foreach ($apartado_bloques as $n_item => $apartado_bloque) {
-					$apartado_bloque_fc = field_collection_field_get_entity($apartado_bloque);
 					
+					$apartado_bloque_fc = field_collection_field_get_entity($apartado_bloque);
 					if(!empty($apartado_bloque_fc->field_bloque_contenido['und'][0]['safe_value'])){
-						
 						$tipo_name = 'sin especificar';
 						if(!empty($apartado_bloque_fc->field_bloque_tipo['und'][0]['tid'])){
 							$tipo_bloque_id = $apartado_bloque_fc->field_bloque_tipo['und'][0]['tid'];
@@ -422,51 +420,65 @@ function get_fieldcollection_apartado($apartados_in){
 			///SUB_APARTADOS////////////////////////////////
 			
 			
-			$sub_apartados = ''; //clean/reset string
 			
+			$unidad_sub_apartados;
 			if(!empty($apartado_fc->field_subapartado['und']))$unidad_sub_apartados = $apartado_fc->field_subapartado['und'];
-			
-			if(!empty($unidad_sub_apartados)){
-				foreach ($unidad_sub_apartados as $n_item => $unidad_sub_apartado) {
-					$sub_apartado_fc = field_collection_field_get_entity($unidad_sub_apartado);
-					
-					$sub_apartado_titulo = '';
-					if(!empty($sub_apartado_fc->field_subapartado_titulo))$sub_apartado_titulo = '<subapartado_titulo class="item" subclass="subapartado_item">'.$sub_apartado_fc->field_subapartado_titulo['und'][0]['safe_value'].'</subapartado_titulo>';
-					//return var_dump($sub_apartado_titulo);
-					$sub_bloques = '';
-					///SUB_APARTADOS bloqueS//////////////////////
-					if(!empty($sub_apartado_fc->field_bloque['und']))$sub_apartado_bloques = $sub_apartado_fc->field_bloque['und'];
-					
-					if(!empty($sub_apartado_bloques)){
-						foreach ($sub_apartado_bloques as $n_item => $sub_apartado_bloque) {
-							$sub_apartado_bloque_fc = field_collection_field_get_entity($sub_apartado_bloque);
-							if(!empty($sub_apartado_bloque_fc->field_bloque_contenido['und'][0]['safe_value'])){
-								$sub_bloque = '';
-								$tipo_name = 'sin especificar';
-								if(!empty($sub_apartado_bloque_fc->field_bloque_tipo['und'][0]['tid'])){
-									$tipo_bloque_id = $sub_apartado_bloque_fc->field_bloque_tipo['und'][0]['tid'];
-									$tipo_bloque = taxonomy_term_load($tipo_bloque_id);
-									$tipo_name = $tipo_bloque->name;
-								}
-								$tipo_name = normalizeChars($tipo_name);
-
-								$sub_bloque = '<bloque tipo="'.$tipo_name.'" class="item" subclass="subapartado_item">'.$sub_apartado_bloque_fc->field_bloque_contenido['und'][0]['safe_value'].'</bloque>';
-								$sub_bloques .= $sub_bloque;
-							}
-						}
-					}
-					//termina sub apartado sub_apartado (concatenar todos los strings)///////////////////
-					$sub_apartados .= '<subapartado class="group" subclass="subapartado_group">'.$sub_apartado_titulo.$sub_bloques.'</subapartado>';
-			
-				}
-			}
+			$subapartados = ''; //clean/reset string
+			$subapartados = get_fieldcollection_subApartado($unidad_sub_apartados);
 
 
 			//termina apartados////////////////////////////
-			$apartados .= '<apartado class="group" subclass="apartado_group">'.$apartado_titulo.$bloques.$sub_apartados.'</apartado>';
+			$apartados .= '<apartado class="group" subclass="apartado_group">'.$apartado_titulo.$bloques.$subapartados.'</apartado>';
 		
 		}
 	}
 	return $apartados;
 
+}
+
+function get_fieldcollection_subApartado(subapartados_in){
+	$sub_apartados = '';
+	if(!empty($subapartados_in)){
+		foreach ($subapartados_in as $n_item => $unidad_sub_apartado) {
+			$sub_apartado_fc = field_collection_field_get_entity($unidad_sub_apartado);
+			
+			$sub_apartado_titulo = '';
+			if(!empty($sub_apartado_fc->field_subapartado_titulo))$sub_apartado_titulo = '<subapartado_titulo class="item" subclass="subapartado_item">'.$sub_apartado_fc->field_subapartado_titulo['und'][0]['safe_value'].'</subapartado_titulo>';
+			//return var_dump($sub_apartado_titulo);
+			
+			///SUB_APARTADOS bloqueS//////////////////////
+			$sub_apartado_bloques;
+			if(!empty($sub_apartado_fc->field_bloque['und']))$sub_apartado_bloques = $sub_apartado_fc->field_bloque['und'];
+			$sub_bloques = '';
+			$sub_bloques = get_fieldcollection_bloques($sub_apartado_bloques);
+			
+			//termina sub apartado sub_apartado (concatenar todos los strings)///////////////////
+			$sub_apartados .= '<subapartado class="group" subclass="subapartado_group">'.$sub_apartado_titulo.$sub_bloques.'</subapartado>';
+
+		}
+	}
+	return $sub_apartados;
+}
+
+function get_fieldcollection_bloques(bloques_in){
+	$bloques = '';
+	if(!empty($bloques_in)){
+		foreach ($bloques_in as $n_item => $bloque) {
+			$bloque_fc = field_collection_field_get_entity($bloque);
+			if(!empty($bloque_fc->field_bloque_contenido['und'][0]['safe_value'])){
+				$bloque = '';
+				$tipo_name = 'sin especificar';
+				if(!empty($bloque_fc->field_bloque_tipo['und'][0]['tid'])){
+					$tipo_bloque_id = $bloque_fc->field_bloque_tipo['und'][0]['tid'];
+					$tipo_bloque = taxonomy_term_load($tipo_bloque_id);
+					$tipo_name = $tipo_bloque->name;
+				}
+				$tipo_name = normalizeChars($tipo_name);
+
+				$bloque = '<bloque tipo="'.$tipo_name.'" class="item" subclass="subapartado_item">'.$bloque_fc->field_bloque_contenido['und'][0]['safe_value'].'</bloque>';
+				$bloques .= $bloque;
+			}
+		}
+	}
+	return $bloques;
 }
