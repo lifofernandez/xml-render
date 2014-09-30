@@ -130,10 +130,13 @@ function node_xml($node) {
 		
 			
 			///APARTADOS//////////////////////////////
-			$unidad_apartados;
-			if(!empty($unidad_fc->field_apartado['und']))$unidad_apartados = $unidad_fc->field_apartado['und'];
+			unset($unidad_apartados);
 			$apartados = '';
-			$apartados = get_fieldcollection_apartado($unidad_apartados);
+			if(!empty($unidad_fc->field_apartado['und'])){
+				$unidad_apartados = $unidad_fc->field_apartado['und'];
+				$apartados = get_fieldcollection_apartado($unidad_apartados);
+			}
+
 
 			///REFERENCIAS BIBLIOGRAFICAS///////
 			$unidad_bibliografia = '';
@@ -382,8 +385,7 @@ function get_field_regular($node, $field, $value_to_get = 'safe_value'){
 
 function get_fieldcollection_apartado($apartados_in){
 	$apartados = '';
-	//$unidad_sub_apartados;
-	//$sub_apartados = '';
+
 
 	if(!empty($apartados_in)){
 		foreach ($apartados_in as $n_item => $unidad_apartado) {
@@ -419,13 +421,12 @@ function get_fieldcollection_apartado($apartados_in){
 
 			///SUB_APARTADOS////////////////////////////////
 			
-			
-			
-			$unidad_sub_apartados;
-			if(!empty($apartado_fc->field_subapartado['und']))$unidad_sub_apartados = $apartado_fc->field_subapartado['und'];
-			$subapartados = ''; //clean/reset string
-			$subapartados = get_fieldcollection_subApartado($unidad_sub_apartados);
-
+			unset($unidad_sub_apartados);
+			$subapartados = '';
+			if(!empty($apartado_fc->field_subapartado['und'])){
+				$unidad_sub_apartados = $apartado_fc->field_subapartado['und'];
+				$subapartados = get_fieldcollection_subApartado($unidad_sub_apartados);
+			}
 
 			//termina apartados////////////////////////////
 			$apartados .= '<apartado class="group" subclass="apartado_group">'.$apartado_titulo.$bloques.$subapartados.'</apartado>';
@@ -447,10 +448,12 @@ function get_fieldcollection_subApartado($subapartados_in){
 			//return var_dump($sub_apartado_titulo);
 			
 			///SUB_APARTADOS bloqueS//////////////////////
-			$sub_apartado_bloques;
-			if(!empty($sub_apartado_fc->field_bloque['und']))$sub_apartado_bloques = $sub_apartado_fc->field_bloque['und'];
+			unset($sub_apartado_bloques);
 			$sub_bloques = '';
-			$sub_bloques = get_fieldcollection_bloques($sub_apartado_bloques);
+			if(!empty($sub_apartado_fc->field_bloque['und'])){
+				$sub_apartado_bloques = $sub_apartado_fc->field_bloque['und'];
+				$sub_bloques = get_fieldcollection_bloques($sub_apartado_bloques);
+			}
 			
 			//termina sub apartado sub_apartado (concatenar todos los strings)///////////////////
 			$sub_apartados .= '<subapartado class="group" subclass="subapartado_group">'.$sub_apartado_titulo.$sub_bloques.'</subapartado>';
