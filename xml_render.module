@@ -77,7 +77,7 @@ function node_xml($node) {
 
 	//INDTRODUCCION///////////////////////
 	$introduccion = get_field_regular($node, 'field_introduccion','safe_value');
-	$output = $introduccion;
+	$output .= $introduccion;
 	//////////////////////////////////////
 
 	//PROBLEMATICA_DEL_CAMPO//////////////
