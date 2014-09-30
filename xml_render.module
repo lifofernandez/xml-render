@@ -436,7 +436,7 @@ function get_fieldcollection_apartado($apartados_in){
 
 }
 
-function get_fieldcollection_subApartado(subapartados_in){
+function get_fieldcollection_subApartado($subapartados_in){
 	$sub_apartados = '';
 	if(!empty($subapartados_in)){
 		foreach ($subapartados_in as $n_item => $unidad_sub_apartado) {
@@ -460,7 +460,7 @@ function get_fieldcollection_subApartado(subapartados_in){
 	return $sub_apartados;
 }
 
-function get_fieldcollection_bloques(bloques_in){
+function get_fieldcollection_bloques($bloques_in){
 	$bloques = '';
 	if(!empty($bloques_in)){
 		foreach ($bloques_in as $n_item => $bloque) {
