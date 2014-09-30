@@ -421,7 +421,7 @@ function get_fieldcollection_apartado($apartados_in){
 
 			///SUB_APARTADOS////////////////////////////////
 			
-			$unidad_sub_apartados; //clean/reset obj
+			
 			$sub_apartados = ''; //clean/reset string
 			
 			if(!empty($apartado_fc->field_subapartado['und']))$unidad_sub_apartados = $apartado_fc->field_subapartado['und'];
@@ -434,7 +434,6 @@ function get_fieldcollection_apartado($apartados_in){
 					if(!empty($sub_apartado_fc->field_subapartado_titulo))$sub_apartado_titulo = '<subapartado_titulo class="item" subclass="subapartado_item">'.$sub_apartado_fc->field_subapartado_titulo['und'][0]['safe_value'].'</subapartado_titulo>';
 					//return var_dump($sub_apartado_titulo);
 					$sub_bloques = '';
-					$sub_apartado_bloques;
 					///SUB_APARTADOS bloqueS//////////////////////
 					if(!empty($sub_apartado_fc->field_bloque['und']))$sub_apartado_bloques = $sub_apartado_fc->field_bloque['und'];
 					
