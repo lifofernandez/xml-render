@@ -61,12 +61,12 @@ function node_xml($node) {
 
 			///AUTOR NOMBRE///////
 			$autor_nombre = '';
-			if(isset($fc_autor->field_autor_nombre))$autor_nombre = '<autor_nombre class="item" subclass="autor_item">'.$fc_autor->field_autor_nombre['und'][0]['safe_value'].'</autor_nombre>';
+			if(!empty($fc_autor->field_autor_nombre))$autor_nombre = '<autor_nombre class="item" subclass="autor_item">'.$fc_autor->field_autor_nombre['und'][0]['safe_value'].'</autor_nombre>';
 			//////////////////////////////////
 
 			///AUTOR BIO///////
 			$autor_bio = '';
-			if(isset($fc_autor->field_autor_biografia))$autor_bio = '<autor_biografia class="item" subclass="autor_item">'.$fc_autor->field_autor_biografia['und'][0]['safe_value'].'</autor_biografia>';
+			if(!empty($fc_autor->field_autor_biografia))$autor_bio = '<autor_biografia class="item" subclass="autor_item">'.$fc_autor->field_autor_biografia['und'][0]['safe_value'].'</autor_biografia>';
 			//////////////////////
 			
 			$autor ='<autor class="group" subclass="autor_group">'.$autor_nombre.$autor_bio.'</autor>';
