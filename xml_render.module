@@ -78,7 +78,7 @@ function node_xml($node) {
 			if(!empty($fc_autor->field_autor_biografia))$autor_bio = '<autor_biografia class="item" subclass="autor_item">'.$fc_autor->field_autor_biografia['und'][0]['safe_value'].'</autor_biografia>';
 			//////////////////////
 			
-			$autor ='<autor class="group" subclass="autor_group">'.$autor_nombre.$autor_bio.$autor_foto.'</autor>';
+			$autor ='<autor class="group" subclass="autor_group">'.$autor_nombre.$autor_foto.$autor_bio.'</autor>';
 		}
 		$output .= $autor;
 	}
