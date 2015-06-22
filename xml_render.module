@@ -63,13 +63,22 @@ function node_xml($node) {
 			$autor_nombre = '';
 			if(!empty($fc_autor->field_autor_nombre))$autor_nombre = '<autor_nombre class="item" subclass="autor_item">'.$fc_autor->field_autor_nombre['und'][0]['safe_value'].'</autor_nombre>';
 			//////////////////////////////////
+			
+			///AUTOR FOTO///////
+			$autor_foto = '';
+			$autor_foto_url = '';
+			if(!empty($fc_autor->field_autor_foto)){
+				$autor_foto_url = file_create_url($fc_autor->field_autor_nombre['und'][0]['uri']);
+				$autor_foto = '<autor_foto class="item" subclass="autor_item"><Image href="file:'.$autor_foto_url.'"></Image></autor_foto>';
+			}
+			//////////////////////////////////
 
 			///AUTOR BIO///////
 			$autor_bio = '';
 			if(!empty($fc_autor->field_autor_biografia))$autor_bio = '<autor_biografia class="item" subclass="autor_item">'.$fc_autor->field_autor_biografia['und'][0]['safe_value'].'</autor_biografia>';
 			//////////////////////
 			
-			$autor ='<autor class="group" subclass="autor_group">'.$autor_nombre.$autor_bio.'</autor>';
+			$autor ='<autor class="group" subclass="autor_group">'.$autor_nombre.$autor_bio.$autor_foto.'</autor>';
 		}
 		$output .= $autor;
 	}
