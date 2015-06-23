@@ -77,7 +77,7 @@ entity, field_collection y  field_collection_fieldset.
 ---
 ######Creditos
 por Lisandro Fernández  
-para **Dirección de Materiales Didácticos** (ramiro@uvq.edu.ar, aelbert@unq.edu.ar.)
+para **Dirección de Materiales Didácticos** (bdeangelis@unq.edu.ar, aelbert@unq.edu.ar.)
 
 Secretaría de Educación Virtual / Universidad Nacional de Quilmes   
 
