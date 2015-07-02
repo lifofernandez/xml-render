@@ -69,7 +69,7 @@ function node_xml($node) {
 			$autor_foto_url = '';
 			if(!empty($fc_autor->field_autor_foto)){
 				$autor_foto_url = file_create_url($fc_autor->field_autor_nombre['und'][0]['safe_value']);
-				$autor_foto = '<autor_foto class="item" subclass="autor_item"><Image href="file:'.$autor_foto_url.'"></Image></autor_foto>';
+				$autor_foto = '<autor_foto class="item" subclass="autor_item"><img href="'.$autor_foto_url.'"></img></autor_foto>';
 			}
 			//////////////////////////////////
 
@@ -236,13 +236,13 @@ function node_xml($node) {
 	//$content_images = array();
 
 	foreach($imgs as $img){
-		$img_original_src = $img->getAttribute('src'); // will give you the src String
+		$img_original_src = $img->getAttribute('src');
 		
-		$filename = basename($img_original_src);         // $file is set to "index.php"
+		$filename = basename($img_original_src);         
 		
 		$img->setAttribute('src','files/'.$filename);
-		$img->setAttribute('href','file:///files/'.$filename); // change your src= value
-		//$img->setAttribute('original_src',$img_original_src); // change your src= value
+		$img->setAttribute('href','file:///files/'.$filename); 
+		//$img->setAttribute('original_src',$img_original_src); 
 
 	//	array_push($content_images, $img_original_src);
 	}
@@ -270,8 +270,8 @@ function node_xml($node) {
 	}
 
 	$zip->addFromString(normalizeChars($titulo_de_la_carpeta.'_x_'.$author_name).'-'.time().'.xml', $XML_output);
-	$zip->addFromString('preprocess_raw_debugString'.'-'.time().'.xml', '<?xml version="1.0"?>'.$output);
-	$zip->addFromString('test_loadHTML'.'-'.time().'.xml', $HTML_output);
+	$zip->addFromString('XMLcrudo-para_debug'.'-'.time().'.xml', '<?xml version="1.0"?>'.$output);
+	// $zip->addFromString('test_loadHTML'.'-'.time().'.xml', $HTML_output);
 	
 
 	// list of files to add
@@ -382,7 +382,7 @@ function get_field_regular($node, $field, $value_to_get = 'safe_value'){
 			}
 			if($value_to_get == 'uri'){
 				$field_value = file_create_url($field_item[$value_to_get]);
-				$fields_output.= '<'.$field_name.' class="item" subclass="carpeta_item"><Image href="file:'.$field_value.'"></Image></'.$field_name.'>';
+				$fields_output.= '<'.$field_name.' class="item" subclass="carpeta_item"><img href="'.$field_value.'"></img></'.$field_name.'>';
 			}
 		}
 	}
