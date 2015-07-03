@@ -61,7 +61,11 @@ function node_xml($node) {
 
 			///AUTOR NOMBRE///////
 			$autor_nombre = '';
-			if(!empty($fc_autor->field_autor_nombre))$autor_nombre = '<autor_nombre class="item" subclass="autor_item">'.$fc_autor->field_autor_nombre['und'][0]['safe_value'].'</autor_nombre>';
+			$nombre = '';
+			if(!empty($fc_autor->field_autor_nombre))$nombre = $fc_autor->field_autor_nombre['und'][0]['safe_value'];
+			$autor_nombre = '<autor_nombre class="item" subclass="autor_item">'.$nombre.'</autor_nombre>';
+
+			
 			//////////////////////////////////
 			
 			///AUTOR FOTO///////
@@ -69,7 +73,7 @@ function node_xml($node) {
 			$autor_foto_url = '';
 			if(!empty($fc_autor->field_autor_foto)){
 				$autor_foto_url = file_create_url($fc_autor->field_autor_foto['und'][0]['uri']);
-				$autor_foto = '<autor_foto class="item" subclass="autor_item"><img href="'.$autor_foto_url.'"></img></autor_foto>';
+				$autor_foto = '<autor_foto class="item" subclass="autor_item"><img alt="Foto del autor:'.$nombre.'" src="'.$autor_foto_url.'"/></autor_foto>';
 			}
 			//////////////////////////////////
 
@@ -360,7 +364,7 @@ function xml_render_permission() {
 
 
 
-//////FUNCIONE PARA EXTRAERE le FIELDS bambino
+//////FUNCIONE PARA EXTRAER FIELDS 
 
 ///fields comunes (no coleccion de fields)
 /// 1st param = node element, 2nd param = field name;  3nd param = tipe of value;
@@ -382,7 +386,7 @@ function get_field_regular($node, $field, $value_to_get = 'safe_value'){
 			}
 			if($value_to_get == 'uri'){
 				$field_value = file_create_url($field_item[$value_to_get]);
-				$fields_output.= '<'.$field_name.' class="item" subclass="carpeta_item"><img href="'.$field_value.'"></img></'.$field_name.'>';
+				$fields_output.= '<'.$field_name.' class="item" subclass="carpeta_item"><img src="'.$field_value.'"/></'.$field_name.'>';
 			}
 		}
 	}
