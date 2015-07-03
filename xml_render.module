@@ -386,7 +386,7 @@ function get_field_regular($node, $field, $value_to_get = 'safe_value'){
 			}
 			if($value_to_get == 'uri'){
 				$field_value = file_create_url($field_item[$value_to_get]);
-				$fields_output.= '<'.$field_name.' class="item" subclass="carpeta_item"><img src="'.$field_value.'"/></'.$field_name.'>';
+				$fields_output.= '<'.$field_name.' class="item" subclass="carpeta_item"><img alt="'.$field_name.'" src="'.$field_value.'"/></'.$field_name.'>';
 			}
 		}
 	}
