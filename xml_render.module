@@ -3,7 +3,7 @@
 
 /*
 
-	master: 02 jul 2015
+	master: 01 ago 2015
 
 */
 
@@ -72,8 +72,9 @@ function node_xml($node) {
 			$autor_foto = '';
 			$autor_foto_url = '';
 			if(!empty($fc_autor->field_autor_foto)){
-				$autor_foto_url = file_create_url($fc_autor->field_autor_foto['und'][0]['uri']);
-				$autor_foto = '<autor_foto class="item" subclass="autor_item"><img alt="Foto del autor:'.$nombre.'" src="'.$autor_foto_url.'"/></autor_foto>';
+				$autor_foto_value	= $fc_autor->field_autor_foto->value();
+				$autor_foto_url		= $autor_foto_value['uri'] ? file_create_url($autor_foto_value['uri']) : '';
+				$autor_foto 		= '<autor_foto class="item" subclass="autor_item"><img alt="Foto del autor:'.$nombre.'" src="/'.$autor_foto_url.'"/></autor_foto>';
 			}
 			//////////////////////////////////
 
