@@ -210,7 +210,9 @@ function node_xml($node) {
 	$dom->formatOutput = TRUE;
 	$imgs = $dom->getElementsByTagName('img');
 	
-	//$content_images = array();
+
+
+	// $content_images = array();
 
 	foreach($imgs as $img){
 		$img_original_src = $img->getAttribute('src'); // will give you the src String
@@ -221,12 +223,14 @@ function node_xml($node) {
 		$img->setAttribute('href','file:///files/'.$filename);
 		//$img->setAttribute('original_src',$img_original_src);
 
-	//	array_push($content_images, $img_original_src);
+	// array_push($content_images, $img_original_src);
 	}
 	$XML_output = $dom->saveXml();
 
 
+	/*
 
+	// (obsolete)
 	$preHtmlOutput = $output;
 	$dom = new DOMDocument;
 	$dom->preserveWhiteSpace = FALSE;
@@ -246,13 +250,14 @@ function node_xml($node) {
 		$filename = basename($img_original_src);         
 		
 		$img->setAttribute('src','files/'.$filename);
-		$img->setAttribute('href','file:///files/'.$filename); 
+		$img->setAttribute('href','file:files/'.$filename); 
 		//$img->setAttribute('original_src',$img_original_src); 
 
 	//	array_push($content_images, $img_original_src);
 	}
 
 	$HTML_output = $dom->saveXml();
+	*/
 
 
 	//$module_vars = array('nodeTitle' => normalizeChars($titulo_de_la_carpeta), 'nodeRenderXml' => $XML_output, 'nodeImgs' => $content_images); // and so on
@@ -280,7 +285,7 @@ function node_xml($node) {
 	
 
 	// list of files to add
-	//$fileList = scandir($autor_folder);
+	// $fileList = scandir($autor_folder);
 	$fileList = array_diff(scandir($autor_folder), array('..', '.'));
 
 	//var_dump($fileList);
@@ -289,7 +294,8 @@ function node_xml($node) {
 	foreach ($fileList as $f) {
 	    $zip->addFile($autor_folder.$f, 'files/'.$f) or die ("ERROR: Could not add file: $f");   
 	}
-	    
+	//aca va autor y mapa conceptual
+	      
 	// close and save archive
 	$zip->close();
 	//echo 'Archive created successfully.';   
