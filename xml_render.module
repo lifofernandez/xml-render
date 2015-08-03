@@ -218,8 +218,8 @@ function node_xml($node) {
 		$filename = basename($img_original_src);         // $file is set to "index.php"
 		
 		$img->setAttribute('src','files/'.$filename);
-		$img->setAttribute('href','file:///files/'.$filename); // change your src= value
-		//$img->setAttribute('original_src',$img_original_src); // change your src= value
+		$img->setAttribute('href','file:///files/'.$filename);
+		//$img->setAttribute('original_src',$img_original_src);
 
 	//	array_push($content_images, $img_original_src);
 	}
@@ -387,7 +387,7 @@ function get_field_regular($node, $field, $value_to_get = 'safe_value'){
 			}
 			if($value_to_get == 'uri'){
 				//$field_value = file_create_url($field_item[$value_to_get]);
-				$field_value   	= $field_item["und"][0][$value_to_get];
+				$field_value   	= $field_item['uri'];
 			        $field_url 	= $field_value ? file_create_url($field_value) : '';
 				$fields_output.= '<'.$field_name.' class="item" subclass="carpeta_item"><img alt="'.$field_name.'" src="'.$field_url.'"/></'.$field_name.'>';
 			}
