@@ -124,6 +124,7 @@ function node_xml($node) {
 		
 				$field_value   	= $field_item['uri'];
 			        $field_url 	= $field_value ? file_create_url($field_value) : '';
+			        print $field_value;
 			        if(!isset($imgs_carpeta))array_push($imgs_carpeta, $field_value);  //url original para incluir en el rar
 				$mapa.= '<'.$mapa_field_name.' class="item" subclass="carpeta_item"><img alt="'.$mapa_field_name.'" src="'.$field_url.'"/></'.$mapa_field_name.'>';
 		
