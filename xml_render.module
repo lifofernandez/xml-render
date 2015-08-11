@@ -116,7 +116,7 @@ function node_xml($node) {
 	$mapa = '';
 	
 	$mapa_field_items = field_get_items('node', $node, 'field_mapa_conceptual');
-	$mapa_field_name = mapa_conceptual;
+	$mapa_field_name = 'mapa_conceptual';
 	
 
 	if(isset($mapa_field_items) && !empty($mapa_field_items)){
