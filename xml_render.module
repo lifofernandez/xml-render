@@ -37,12 +37,12 @@ function carpeta_access_callback($node) {
 
 
 // array de imagenes de la carpeta
-$imgs_carpeta = array();
+
 
 ///collect field and field collection values
 function node_xml($node) {
 
-
+$imgs_carpeta = array();
 
 
 	$output = '<carpeta>';
@@ -110,7 +110,7 @@ function node_xml($node) {
 	/////////////////////////////////////
 
 	//FIELD_MAPA_CONCEPTUAL//////////////
-	$mapa = get_field_regular($node, 'field_mapa_conceptual','uri');
+	$mapa = get_field_regular($node, 'field_mapa_conceptual','uri',$imgs_carpeta);
 	
 	
 	$output .= $mapa;
@@ -391,7 +391,7 @@ function xml_render_permission() {
 ///fields comunes (no coleccion de fields)
 /// 1st param = node element, 2nd param = field name;  3nd param = tipe of value;
 
-function get_field_regular($node, $field, $value_to_get = 'safe_value'){
+function get_field_regular($node, $field, $value_to_get = 'safe_value', $imgs_carpeta = null){
 
 	$field_items = field_get_items('node', $node, $field);
 	$field_name = str_replace('field_', '', $field);
@@ -410,7 +410,7 @@ function get_field_regular($node, $field, $value_to_get = 'safe_value'){
 				//$field_value = file_create_url($field_item[$value_to_get]);
 				$field_value   	= $field_item['uri'];
 			        $field_url 	= $field_value ? file_create_url($field_value) : '';
-			        array_push($imgs_carpeta, $field_url);  //url original para incluir en el rar
+			        if(!isset($imgs_carpeta))array_push($imgs_carpeta, $field_url);  //url original para incluir en el rar
 				$fields_output.= '<'.$field_name.' class="item" subclass="carpeta_item"><img alt="'.$field_name.'" src="'.$field_url.'"/></'.$field_name.'>';
 			}
 		}
