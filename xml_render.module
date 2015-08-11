@@ -227,7 +227,7 @@ function node_xml($node) {
 		$filename = basename($img_original_src);         
 		
 		$img->setAttribute('src','files/'.$filename);
-		$img->setAttribute('href','file:///files/'.$filename);
+	//	$img->setAttribute('href','file:///files/'.$filename);
 		//$img->setAttribute('original_src',$img_original_src);
 
 	// array_push($content_images, $img_original_src);
