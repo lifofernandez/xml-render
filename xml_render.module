@@ -36,13 +36,13 @@ function carpeta_access_callback($node) {
 }
 
 
-// array de imagenes de la carpeta
 
 
 ///collect field and field collection values
 function node_xml($node) {
 
-$imgs_carpeta = array();
+	// array de imagenes de la carpeta
+	$imgs_carpeta = array();
 
 
 	$output = '<carpeta>';
@@ -79,6 +79,8 @@ $imgs_carpeta = array();
 				$autor_foto_value   	= $fc_autor->field_autor_foto["und"][0]["uri"];
 			        $autor_foto_url 	= $autor_foto_value ? file_create_url($autor_foto_value) : '';
 			        array_push($imgs_carpeta, $autor_foto_url);  //url original para incluir en el rar
+			        print '$autor_foto_url:'.$autor_foto_url;
+			        print '$autor_foto_value'.$autor_foto_value;
 				$autor_foto		= '<autor_foto class="item" subclass="autor_item"><img alt="Foto del autor:'.$nombre.'" src="'.$autor_foto_url.'"/></autor_foto>';
 			}
 			//////////////////////////////////
@@ -197,8 +199,9 @@ $imgs_carpeta = array();
 	$output .= $anexos;
 	
 	$author_name = ($node->name);
+	
 	///FINAL
-	///cocat all fields
+	///concat all fields
 	$output .= '</carpeta>';
 
 	//debug string, util cuando no hay contenido para generar el render .xml
@@ -227,7 +230,7 @@ $imgs_carpeta = array();
 		$filename = basename($img_original_src);         
 		
 		$img->setAttribute('src','files/'.$filename);
-	//	$img->setAttribute('href','file:///files/'.$filename);
+		//$img->setAttribute('href','file:///files/'.$filename);
 		//$img->setAttribute('original_src',$img_original_src);
 
 	// array_push($content_images, $img_original_src);
@@ -269,7 +272,6 @@ $imgs_carpeta = array();
 
 	//$module_vars = array('nodeTitle' => normalizeChars($titulo_de_la_carpeta), 'nodeRenderXml' => $XML_output, 'nodeImgs' => $content_images); // and so on
 	//drupal_add_js(array('xml_render' => $module_vars), 'setting'); 
-
 	//drupal_add_js(drupal_get_path('module', 'xml_render') .'/js/xml_render.js');
 
 	$autor_folder = 'sites/default/files/autores/'.$author_name.'/';
@@ -305,7 +307,8 @@ $imgs_carpeta = array();
 	// add carpeta imgs (autor y mapa conceptual)
 	
 	foreach ($imgs_carpeta as $img) {
-		$img_basename = basename($img);   
+		$img_basename = basename($img);
+		print $img.' - '.$img_basename;
 		
 		$zip->addFile($img, 'files/'.$img_basename) or die ("ERROR: Could not add file: $f");   
 	}
