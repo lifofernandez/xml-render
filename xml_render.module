@@ -312,7 +312,7 @@ function node_xml($node) {
 		
 		//print $img.' - '.$img_basename;
 		
-		$zip->addFile($img_local, 'files/'.$img_basename) or die ("ERROR: Could not add file: $f");   
+		$zip->addFile($img_local, 'files/'.$img_basename) or die ("ERROR: Could not add file: $img_basename");   
 	}
 	
 	      
