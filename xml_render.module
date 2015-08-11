@@ -41,6 +41,9 @@ function carpeta_access_callback($node) {
 ///collect field and field collection values
 function node_xml($node) {
 
+$imgs = array();
+
+
 	$output = '<carpeta>';
 	 // return t('Hello node with id !nid', array('!nid' => $node->nid));
 
@@ -74,6 +77,7 @@ function node_xml($node) {
 			if(!empty($fc_autor->field_autor_foto)){
 				$autor_foto_value   	= $fc_autor->field_autor_foto["und"][0]["uri"];
 			        $autor_foto_url 	= $autor_foto_value ? file_create_url($autor_foto_value) : '';
+			        array_push($imgs, $autor_foto_url);  //url original para incluir en el rar
 				$autor_foto		= '<autor_foto class="item" subclass="autor_item"><img alt="Foto del autor:'.$nombre.'" src="'.$autor_foto_url.'"/></autor_foto>';
 			}
 			//////////////////////////////////
@@ -106,6 +110,8 @@ function node_xml($node) {
 
 	//FIELD_MAPA_CONCEPTUAL//////////////
 	$mapa = get_field_regular($node, 'field_mapa_conceptual','uri');
+	
+	
 	$output .= $mapa;
 	////////////////////////////////////
 
@@ -270,7 +276,7 @@ function node_xml($node) {
 	global $base_url;
 
 	if (!file_exists('sites/default/files/xml_renders')) {
-    	mkdir('sites/default/files/xml_renders', 0777, true);
+    		mkdir('sites/default/files/xml_renders', 0777, true);
 	}
 	// create object
 	$zip = new ZipArchive();
@@ -290,9 +296,22 @@ function node_xml($node) {
 
 	//var_dump($fileList);
 
-	// add files
+	// add AUTOR files
 	foreach ($fileList as $f) {
 	    $zip->addFile($autor_folder.$f, 'files/'.$f) or die ("ERROR: Could not add file: $f");   
+	}
+	
+	// add carpeta imgs
+	
+	foreach ($imgs as $img) {
+		$path_parts = pathinfo($img);
+		
+		$file = $path_parts['filename'];
+		$ext = $path_parts['extension'];
+		
+		$img_clean = $file.'.'.$ext;
+		
+		$zip->addFile($img, 'files/'.$img_clean) or die ("ERROR: Could not add file: $f");   
 	}
 	//aca va autor y mapa conceptual
 	      
@@ -395,6 +414,7 @@ function get_field_regular($node, $field, $value_to_get = 'safe_value'){
 				//$field_value = file_create_url($field_item[$value_to_get]);
 				$field_value   	= $field_item['uri'];
 			        $field_url 	= $field_value ? file_create_url($field_value) : '';
+			        array_push($imgs, $field_url);  //url original para incluir en el rar
 				$fields_output.= '<'.$field_name.' class="item" subclass="carpeta_item"><img alt="'.$field_name.'" src="'.$field_url.'"/></'.$field_name.'>';
 			}
 		}
