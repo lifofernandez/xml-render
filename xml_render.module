@@ -36,12 +36,13 @@ function carpeta_access_callback($node) {
 }
 
 
-
+// array de imagenes de la carpeta
+$imgs_carpeta = array();
 
 ///collect field and field collection values
 function node_xml($node) {
 
-$imgs_carpeta = array();
+
 
 
 	$output = '<carpeta>';
