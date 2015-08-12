@@ -167,9 +167,7 @@ function node_xml($node) {
 	if(!empty($unidad_items)){
 		foreach ($unidad_items as $n_item => $unidad_item) {
 			$unidad_fc = field_collection_field_get_entity($unidad_item);
-			//return print_r($unidad_fc);
-			//return print_r($fc);
-			//$fc_name = $unidad_fc->field_name;
+		
 			
 			///UNIDAD TITULO///////////
 			$unidad_titulo = '';
@@ -186,8 +184,6 @@ function node_xml($node) {
 			if(!empty($unidad_fc->field_unidad_introduccion))$unidad_introduccion = '<unidad_introduccion class="item" subclass="unidad_item">'.$unidad_fc->field_unidad_introduccion['und'][0]['safe_value'].'</unidad_introduccion>';
 			/////////////////////////// 
 
-			
-		
 			
 			///APARTADOS//////////////////////////////
 			unset($unidad_apartados);
@@ -301,7 +297,7 @@ function node_xml($node) {
 
 	// add AUTOR files
 	foreach ($fileList as $f) {
-	    $zip->addFile($autor_folder.$f, 'files/'.$f) or die ("ERROR: Could not add file: $f");   
+	    	$zip->addFile($autor_folder.$f, 'files/'.$f) or die ("ERROR: Could not add file: $f");   
 	}
 	
 	
