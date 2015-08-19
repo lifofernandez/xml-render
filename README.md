@@ -39,7 +39,8 @@ Este modulo depende que exista un tipo de contenido "Carpeta" con la siguiente e
 [title](de facto)
 
 [field_autor] (field collection - única instancia) 
-	[field_autor_nombre] (campo individual - única instancia) TEXTO CORTO 
+	[field_autor_nombre] (campo individual - única instancia) TEXTO CORTO
+	[field_autor_foto] (campo individual  - única instancia) IMAGEN 
 	[field_autor_biografia] (campo individual - única instancia) TEXTO 
 
 [field_introduccion] (campo individual  - única instancia) TEXTO
